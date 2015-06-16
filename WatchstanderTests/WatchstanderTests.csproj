@@ -39,12 +39,14 @@
     <Compile Include="Integration\SchemaLoaderTests.cs" />
     <Compile Include="Unit\MetadataTests.cs" />
     <Compile Include="Unit\RateTests.cs" />
+    <Compile Include="Functional\LimitedCollectorTests.cs" />
+    <Compile Include="Unit\TaggerDictionaryTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Unit\" />
     <Folder Include="Integration\" />
-    <Folder Include="Usage\" />
+    <Folder Include="Functional\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

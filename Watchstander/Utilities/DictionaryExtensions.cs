@@ -32,6 +32,47 @@ namespace Watchstander.Utilities
 
 			return true;
 		}
+
+		public static IReadOnlyDictionary<string, TValue> CombineDictionaries<TValue>(
+			this IReadOnlyDictionary<string, TValue> first,
+			IReadOnlyDictionary<string, TValue> second,
+			IDictionary<string, TValue> target = null
+		){
+			if (target == null)
+			{
+				target = new Dictionary<string, TValue> ();
+			}
+
+			if (first != null)
+			{
+				foreach (var key in first.Keys)
+				{
+					if (target.ContainsKey (key))
+					{
+						// probably should do something here
+						throw new Exception ("can't add tag twice");
+					}
+
+					target [key] = first [key];
+				}
+			}
+
+			if (second != null)
+			{
+				foreach (var key in second.Keys)
+				{
+					if (target.ContainsKey (key))
+					{
+						// probably should do something here
+						throw new Exception ("can't add tag twice");
+					}
+
+					target [key] = second [key];
+				}
+			}
+
+			return target.AsReadOnly ();
+		}
 	}
 }
 

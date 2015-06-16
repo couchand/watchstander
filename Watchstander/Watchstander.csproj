@@ -63,6 +63,15 @@
     <Compile Include="Utilities\DictionaryExtensions.cs" />
     <Compile Include="Utilities\EnumerableExtensions.cs" />
     <Compile Include="Utilities\ReadOnlyDictionary.cs" />
+    <Compile Include="Porcelain\CollectorMetric.cs" />
+    <Compile Include="Porcelain\RootCollector.cs" />
+    <Compile Include="Porcelain\LimitedCollector.cs" />
+    <Compile Include="Porcelain\ICollector.cs" />
+    <Compile Include="Porcelain\CollectorFactory.cs" />
+    <Compile Include="Porcelain\INameLimitable.cs" />
+    <Compile Include="Porcelain\TaggerDictionary.cs" />
+    <Compile Include="Porcelain\ITagLimitable.cs" />
+    <Compile Include="Porcelain\IDescribable.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
