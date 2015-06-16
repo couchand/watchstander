@@ -12,7 +12,7 @@ using System;
 using Watchstander.Common;
 using Watchstander.Plumbing;
 
-namespace WatchstanderTests
+namespace WatchstanderTests.Unit
 {
 	[TestFixture]
 	public class RateTests

@@ -6,7 +6,7 @@ using System;
 using Watchstander.Common;
 using Watchstander.Plumbing;
 
-namespace WatchstanderTests
+namespace WatchstanderTests.Integration
 {
 	[TestFixture]
 	public class SchemaLoaderTests

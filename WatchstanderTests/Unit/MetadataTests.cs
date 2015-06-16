@@ -8,7 +8,7 @@ using Watchstander.Common;
 using Watchstander.Plumbing;
 using Watchstander.Utilities;
 
-namespace WatchstanderTests
+namespace WatchstanderTests.Unit
 {
 	public class MetricTest : IMetric
 	{

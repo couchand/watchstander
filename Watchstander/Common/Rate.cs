@@ -13,8 +13,8 @@ namespace Watchstander.Common
 	{
 		Unknown,
 		Gauge,
-		Rate,
-		Counter
+		Counter,
+		Rate
 	}
 
 	public static class RateExtensions
