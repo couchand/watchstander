@@ -9,9 +9,12 @@ namespace Watchstander.Porcelain
 	{
 		public RootCollector Root { get; }
 		public string NamePrefix { get; }
-		public IReadOnlyDictionary<string, string> Tags { get; }
 
-		public readonly TaggerDictionary taggers;
+		public TagLimiter Limiter { get; }
+
+		public IReadOnlyDictionary<string, string> Tags => Limiter.Tags;
+		public IReadOnlyList<string> TagKeys => Limiter.TagKeys;
+		public TaggerDictionary Taggers => Limiter.Taggers;
 
 		private string description;
 		private bool descriptionIsDirty;
@@ -29,12 +32,12 @@ namespace Watchstander.Porcelain
 			}
 		}
 
-		public LimitedCollector (RootCollector Root, string NamePrefix, IReadOnlyDictionary<string, string> Tags, TaggerDictionary taggers)
+		public LimitedCollector (RootCollector Root, string NamePrefix, TagLimiter Limiter)
 		{
 			this.Root = Root;
 			this.NamePrefix = NamePrefix;
-			this.Tags = Tags;
-			this.taggers = taggers;
+
+			this.Limiter = Limiter;
 
 			this.description = null;
 			this.descriptionIsDirty = false;
@@ -78,7 +81,7 @@ namespace Watchstander.Porcelain
 
 		public ICollector WithTag<TValue> (string tagKey, TValue tagValue)
 		{
-			if (taggers == null || !taggers.Contains<TValue> (tagKey))
+			if (Taggers == null || !Taggers.Contains<TValue> (tagKey))
 			{
 				throw new ArgumentOutOfRangeException ("tagKey", tagKey, "You must provide a tagger.");
 			}
@@ -88,7 +91,7 @@ namespace Watchstander.Porcelain
 				throw new ArgumentException ("Tag already applied.", "tagKey");
 			}
 
-			var value = taggers.Get (tagKey, tagValue);
+			var value = Taggers.Get (tagKey, tagValue);
 
 			return CollectorFactory.LimitCollectorTags (this, tagKey, value);
 		}

@@ -13,14 +13,14 @@ namespace Watchstander.Porcelain
 
 			if (parent is RootCollector)
 			{
-				return new LimitedCollector ((RootCollector)parent, namePrefix, null, null);
+				return new LimitedCollector ((RootCollector)parent, namePrefix, new TagLimiter());
 			}
 			else if (parent is LimitedCollector)
 			{
 				var limited = parent as LimitedCollector;
 				var newName = limited.NamePrefix + namePrefix;
 
-				return new LimitedCollector (limited.Root, newName, limited.Tags, null);
+				return new LimitedCollector (limited.Root, newName, new TagLimiter(limited.Tags, null));
 			}
 			else
 			{
@@ -40,14 +40,14 @@ namespace Watchstander.Porcelain
 		{
 			if (parent is RootCollector)
 			{
-				return new LimitedCollector ((RootCollector)parent, "", tags, null);
+				return new LimitedCollector ((RootCollector)parent, "", new TagLimiter(tags, null));
 			}
 			else if (parent is LimitedCollector)
 			{
 				var limited = parent as LimitedCollector;
-				var newTags = limited.Tags.CombineDictionaries (tags);
+				var newLimiter = limited.Limiter.Add (tags);
 
-				return new LimitedCollector (limited.Root, "", newTags, null);
+				return new LimitedCollector (limited.Root, "", newLimiter);
 			}
 			else
 			{
@@ -60,18 +60,16 @@ namespace Watchstander.Porcelain
 		{
 			if (parent is RootCollector)
 			{
-				var newTaggers = new TaggerDictionary ();
-				newTaggers.Add (tagKey, tagger);
+				var newLimiter = new TagLimiter ().Add (tagKey, tagger);
 
-				return new LimitedCollector ((RootCollector)parent, "", null, newTaggers);
+				return new LimitedCollector ((RootCollector)parent, "", newLimiter);
 			}
 			else if (parent is LimitedCollector)
 			{
 				var limited = parent as LimitedCollector;
-				var newTaggers = new TaggerDictionary(limited.taggers);
-				newTaggers.Add (tagKey, tagger);
+				var newLimiter = limited.Limiter.Add (tagKey, tagger);
 
-				return new LimitedCollector(limited.Root, limited.NamePrefix, limited.Tags, newTaggers);
+				return new LimitedCollector(limited.Root, limited.NamePrefix, newLimiter);
 			}
 			else
 			{

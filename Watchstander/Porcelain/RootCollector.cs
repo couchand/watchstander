@@ -7,6 +7,7 @@ namespace Watchstander.Porcelain
 	public class RootCollector : ICollector
 	{
 		public string NamePrefix => "";
+		public IReadOnlyList<string> TagKeys => null;
 		public IReadOnlyDictionary<string, string> Tags => null;
 
 		private string description;

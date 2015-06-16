@@ -5,6 +5,7 @@ namespace Watchstander.Porcelain
 {
 	public interface ITagLimitable
 	{
+		IReadOnlyList<string> TagKeys { get; }
 		IReadOnlyDictionary<string, string> Tags { get; }
 
 		ICollector WithTag (string tagKey, string tagValue);
