@@ -98,7 +98,7 @@ namespace WatchstanderTests.Functional
 			var collector = getRootCollector ();
 
 			// TODO: needz moar type
-			Assert.Throws<Exception>(() => collector.GetMetric ("foo.bar.baz"));
+			Assert.Throws<Exception>(() => collector.GetTimeSeries ("foo.bar.baz"));
 		}
 
 		[Test]
@@ -108,7 +108,7 @@ namespace WatchstanderTests.Functional
 				.WithName ("foo")
 				.WithName ("bar");
 
-			Assert.Throws<Exception>(() => collector.GetMetric ("baz"));
+			Assert.Throws<Exception>(() => collector.GetTimeSeries ("baz"));
 		}
 
 		[Test]
@@ -125,6 +125,19 @@ namespace WatchstanderTests.Functional
 			Assert.AreEqual (1, metric.Tags.Count);
 			Assert.That (metric.Tags.ContainsKey ("host"));
 			Assert.AreEqual ("foobar", metric.Tags ["host"]);
+		}
+
+		[Test]
+		public void TestGetTimeSeries()
+		{
+			var collector = getRootCollector ();
+
+			var timeSeries = collector.GetTimeSeries ("foo.bar.baz", "host", "foobar");
+
+			Assert.AreEqual ("foo.bar.baz", timeSeries.Metric.Name);
+			Assert.AreEqual (1, timeSeries.Tags.Count);
+			Assert.That (timeSeries.Tags.ContainsKey ("host"));
+			Assert.AreEqual ("foobar", timeSeries.Tags ["host"]);
 		}
 	}
 }

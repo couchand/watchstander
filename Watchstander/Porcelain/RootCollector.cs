@@ -45,8 +45,7 @@ namespace Watchstander.Porcelain
 
 		public ICollectorMetric GetMetric(string name)
 		{
-			// needz one tag
-			throw new Exception ("you must provide at least one tag");
+			return new CollectorMetric (this, name, new TagLimiter ());
 		}
 	}
 }

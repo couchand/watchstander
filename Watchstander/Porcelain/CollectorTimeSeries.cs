@@ -15,8 +15,21 @@ namespace Watchstander.Porcelain
 
 		public CollectorTimeSeries (CollectorMetric metric, IReadOnlyDictionary<string, string> Tags)
 		{
+			validate(metric, Tags);
+
 			this.metric = metric;
 			this.Tags = Tags;
+		}
+
+		private static void validate(CollectorMetric metric, IReadOnlyDictionary<string, string> Tags)
+		{
+			if (Tags == null || Tags.Count == 0)
+			{
+				// needz one tag
+				throw new Exception ("you must provide at least one tag");
+			}
+
+			// TODO: check for schema-completeness
 		}
 	}
 }

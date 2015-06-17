@@ -68,7 +68,6 @@ namespace Watchstander.Porcelain
 
 		public ICollectorTimeSeries GetTimeSeries()
 		{
-			// TODO: check for schema-completeness
 			return new CollectorTimeSeries(this, Tags);
 		}
 
