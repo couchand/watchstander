@@ -9,6 +9,7 @@ namespace Watchstander.Porcelain
 	{
 		private readonly RootCollector collector;
 		private readonly string name;
+		private readonly bool enabled;
 
 		internal TagLimiter Limiter { get; }
 
@@ -29,21 +30,33 @@ namespace Watchstander.Porcelain
 		public Rate Rate => Rate.Unknown;
 		public string Unit => "";
 
-		public CollectorMetric (RootCollector collector, string name, TagLimiter Limiter)
+		internal CollectorMetric (RootCollector collector, string name, TagLimiter Limiter, bool enabled)
 		{
 			this.collector = collector;
 			this.Limiter = Limiter;
 			this.name = name;
+			this.enabled = enabled;
 		}
 
-		private CollectorMetric (CollectorMetric copy, TagLimiter Limiter)
+		private CollectorMetric (CollectorMetric copy, TagLimiter Limiter, bool? enabled = null)
 		{
 			this.Limiter = Limiter;
 
 			this.collector = copy.collector;
 			this.name = copy.name;
+			this.enabled = enabled ?? copy.enabled;
 
 			this.Description = copy.Description;
+		}
+
+		public ICollectorMetric Disabled()
+		{
+			return new CollectorMetric(this, Limiter, false);
+		}
+
+		public ICollectorMetric Reenabled()
+		{
+			return new CollectorMetric(this, Limiter, true);
 		}
 
 		public ICollectorMetric WithTag (string tagKey, string tagValue)
@@ -68,25 +81,25 @@ namespace Watchstander.Porcelain
 
 		public ICollectorTimeSeries<TData> GetTimeSeries<TData>()
 		{
-			return new CollectorTimeSeries<TData>(collector, this, Tags);
+			return new CollectorTimeSeries<TData>(collector, this, Tags, enabled);
 		}
 
 		public ICollectorTimeSeries<TData> GetTimeSeries<TData>(string tagKey, string tagValue)
 		{
 			var updated = Limiter.Add (tagKey, tagValue);
-			return new CollectorTimeSeries<TData> (collector, this, updated.Tags);
+			return new CollectorTimeSeries<TData> (collector, this, updated.Tags, enabled);
 		}
 
 		public ICollectorTimeSeries<TData> GetTimeSeries<TData>(IReadOnlyDictionary<string, string> tags)
 		{
 			var updated = Limiter.Add (tags);
-			return new CollectorTimeSeries<TData> (collector, this, updated.Tags);
+			return new CollectorTimeSeries<TData> (collector, this, updated.Tags, enabled);
 		}
 
 		public ICollectorTimeSeries<TData> GetTimeSeries<TData, TTaggable>(string tagKey, TTaggable tagValue)
 		{
 			var updated = Limiter.Resolve (tagKey, tagValue);
-			return new CollectorTimeSeries<TData> (collector, this, updated.Tags);
+			return new CollectorTimeSeries<TData> (collector, this, updated.Tags, enabled);
 		}
 	}
 }

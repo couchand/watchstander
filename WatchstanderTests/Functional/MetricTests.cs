@@ -148,6 +148,27 @@ namespace WatchstanderTests.Functional
 			Assert.AreEqual (1.0f, floatConsumer.Data [0].Value);
 			Assert.AreEqual (2.0f, floatConsumer.Data [1].Value);
 		}
+
+		[Test]
+		public void TestDisabling()
+		{
+			var longConsumer = new AccumulatingConsumer<long> ();
+
+			var metric = getMetric (longConsumer, new NullConsumer<float>());
+
+			metric.Record<long> (42);
+
+			var disabled = metric.Disabled ();
+			disabled.Record<long> (0);
+
+			var reenabled = disabled.Reenabled ();
+			reenabled.Record<long> (43);
+
+			Assert.AreEqual (2, longConsumer.Data.Count);
+
+			Assert.AreEqual (42, longConsumer.Data [0].Value);
+			Assert.AreEqual (43, longConsumer.Data [1].Value);
+		}
 	}
 }
 

@@ -18,31 +18,42 @@ namespace Watchstander.Porcelain
 			this.floatConsumer = floatConsumer;
 		}
 
+		public ICollector Disabled()
+		{
+			return new LimitedCollector(this, new NameLimiter(), new TagLimiter(), false);
+		}
+
+		public ICollector Reenabled()
+		{
+			// we can be sure it's never been disabled
+			return this;
+		}
+
 		public ICollector WithName(string name)
 		{
 			var nameLimiter = new NameLimiter ().Add(name);
-			return new LimitedCollector (this, nameLimiter, new TagLimiter());
+			return new LimitedCollector (this, nameLimiter, new TagLimiter(), true);
 		}
 
 		public ICollector WithNamePrefix(string namePrefix)
 		{
 			var nameLimiter = new NameLimiter ().AddPrefix(namePrefix);
-			return new LimitedCollector (this, nameLimiter, new TagLimiter());
+			return new LimitedCollector (this, nameLimiter, new TagLimiter(), true);
 		}
 
 		public ICollector WithTag (string tagKey, string tagValue)
 		{
-			return new LimitedCollector(this, new NameLimiter(), new TagLimiter ().Add(tagKey, tagValue));
+			return new LimitedCollector(this, new NameLimiter(), new TagLimiter ().Add(tagKey, tagValue), true);
 		}
 
 		public ICollector WithTags (IReadOnlyDictionary<string, string> tags)
 		{
-			return new LimitedCollector (this, new NameLimiter(), new TagLimiter ().Add(tags));
+			return new LimitedCollector (this, new NameLimiter(), new TagLimiter ().Add(tags), true);
 		}
 
 		public ICollector WithTagger<TTaggable>(string tagKey, Func<TTaggable, string> tagger)
 		{
-			return new LimitedCollector (this, new NameLimiter(), new TagLimiter ().Add (tagKey, tagger));
+			return new LimitedCollector (this, new NameLimiter(), new TagLimiter ().Add (tagKey, tagger), true);
 		}
 
 		public ICollector WithTag<TTaggable> (string tagKey, TTaggable tagValue)
@@ -53,7 +64,7 @@ namespace Watchstander.Porcelain
 
 		public ICollectorMetric GetMetric(string name)
 		{
-			return new CollectorMetric (this, name, new TagLimiter ());
+			return new CollectorMetric (this, name, new TagLimiter (), true);
 		}
 
 		public void Consume(IEnumerable<IDataPoint<long>> values)

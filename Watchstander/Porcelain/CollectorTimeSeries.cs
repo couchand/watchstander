@@ -14,13 +14,34 @@ namespace Watchstander.Porcelain
 		private RootCollector collector;
 		private CollectorMetric metric;
 
-		public CollectorTimeSeries (RootCollector collector, CollectorMetric metric, IReadOnlyDictionary<string, string> Tags)
+		private bool enabled;
+
+		internal CollectorTimeSeries (RootCollector collector, CollectorMetric metric, IReadOnlyDictionary<string, string> Tags, bool enabled)
 		{
 			validate(metric, Tags);
 
 			this.collector = collector;
 			this.metric = metric;
 			this.Tags = Tags;
+			this.enabled = enabled;
+		}
+
+		private CollectorTimeSeries (CollectorTimeSeries<TData> copy, bool enabled)
+		{
+			this.collector = copy.collector;
+			this.metric = copy.metric;
+			this.Tags = copy.Tags;
+			this.enabled = enabled;
+		}
+
+		public ICollectorTimeSeries<TData> Disabled()
+		{
+			return new CollectorTimeSeries<TData> (this, false);
+		}
+
+		public ICollectorTimeSeries<TData> Reenabled()
+		{
+			return new CollectorTimeSeries<TData> (this, true);
 		}
 
 		private static void validate(CollectorMetric metric, IReadOnlyDictionary<string, string> Tags)
@@ -43,6 +64,9 @@ namespace Watchstander.Porcelain
 
 		public void Record(TData value, DateTime now)
 		{
+			if (!enabled)
+				return;
+
 			var dataPoint = new CollectedDataPoint<TData>(this, now, value);
 			var points = new List<IDataPoint<TData>> { dataPoint };
 

@@ -18,36 +18,49 @@ namespace Watchstander.Porcelain
 
 		public string Description { get; set; }
 
-		public LimitedCollector (RootCollector Root, NameLimiter NameLimiter, TagLimiter TagLimiter)
+		internal bool Enabled { get; }
+
+		internal LimitedCollector (RootCollector Root, NameLimiter NameLimiter, TagLimiter TagLimiter, bool Enabled)
 		{
 			this.Root = Root;
 			this.NameLimiter = NameLimiter;
 			this.TagLimiter = TagLimiter;
+			this.Enabled = Enabled;
+		}
+
+		public ICollector Disabled()
+		{
+			return new LimitedCollector(Root, NameLimiter, TagLimiter, false);
+		}
+
+		public ICollector Reenabled()
+		{
+			return new LimitedCollector(Root, NameLimiter, TagLimiter, true);
 		}
 
 		public ICollector WithName(string name)
 		{
-			return new LimitedCollector (Root, NameLimiter.Add(name), TagLimiter);
+			return new LimitedCollector (Root, NameLimiter.Add(name), TagLimiter, Enabled);
 		}
 
 		public ICollector WithNamePrefix(string namePrefix)
 		{
-			return new LimitedCollector (Root, NameLimiter.AddPrefix(namePrefix), TagLimiter);
+			return new LimitedCollector (Root, NameLimiter.AddPrefix(namePrefix), TagLimiter, Enabled);
 		}
 
 		public ICollector WithTag (string tagKey, string tagValue)
 		{
-			return new LimitedCollector(Root, NameLimiter, TagLimiter.Add(tagKey, tagValue));
+			return new LimitedCollector(Root, NameLimiter, TagLimiter.Add(tagKey, tagValue), Enabled);
 		}
 
 		public ICollector WithTags (IReadOnlyDictionary<string, string> tags)
 		{
-			return new LimitedCollector(Root, NameLimiter, TagLimiter.Add(Tags));
+			return new LimitedCollector(Root, NameLimiter, TagLimiter.Add(Tags), Enabled);
 		}
 
 		public ICollector WithTagger<TTaggable> (string tagKey, Func<TTaggable, string> tagger)
 		{
-			return new LimitedCollector(Root, NameLimiter, TagLimiter.Add (tagKey, tagger));
+			return new LimitedCollector(Root, NameLimiter, TagLimiter.Add (tagKey, tagger), Enabled);
 		}
 
 		public ICollector WithTag<TTaggable> (string tagKey, TTaggable tagValue)
@@ -69,7 +82,7 @@ namespace Watchstander.Porcelain
 
 		public ICollectorMetric GetMetric(string name)
 		{
-			return new CollectorMetric(Root, NameLimiter.Resolve(name), TagLimiter);
+			return new CollectorMetric(Root, NameLimiter.Resolve(name), TagLimiter, Enabled);
 		}
 	}
 }

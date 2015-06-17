@@ -6,6 +6,9 @@ namespace Watchstander.Porcelain
 {
 	public interface ICollector : IDescribable
 	{
+		ICollector Disabled ();
+		ICollector Reenabled ();
+
 		ICollector WithName (string namePrefix);
 		ICollector WithNamePrefix (string namePrefix);
 
@@ -20,6 +23,9 @@ namespace Watchstander.Porcelain
 
 	public interface ICollectorMetric : IMetric, IDescribable
 	{
+		ICollectorMetric Disabled ();
+		ICollectorMetric Reenabled ();
+
 		ICollectorMetric WithTag (string tagKey, string tagValue);
 		ICollectorMetric WithTags (IReadOnlyDictionary<string, string> tags);
 
@@ -35,6 +41,8 @@ namespace Watchstander.Porcelain
 
 	public interface ICollectorTimeSeries<TData> : ITimeSeries, IRecorder<TData>, IDescribable
 	{
+		ICollectorTimeSeries<TData> Disabled ();
+		ICollectorTimeSeries<TData> Reenabled ();
 	}
 }
 

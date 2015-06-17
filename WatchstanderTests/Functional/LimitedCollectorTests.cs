@@ -17,7 +17,12 @@ namespace WatchstanderTests.Functional
 	{
 		private ICollector getRootCollector()
 		{
-			return new RootCollector (new NullConsumer<long>(), new NullConsumer<float>());
+			return getRootCollector (new NullConsumer<long> (), new NullConsumer<float> ());
+		}
+
+		private ICollector getRootCollector(IDataPointConsumer<long> longConsumer, IDataPointConsumer<float> floatConsumer)
+		{
+			return new RootCollector (longConsumer, floatConsumer);
 		}
 
 		[Test]
@@ -176,6 +181,52 @@ namespace WatchstanderTests.Functional
 			Assert.AreEqual (1, timeSeries.Tags.Count);
 			Assert.That (timeSeries.Tags.ContainsKey ("host"));
 			Assert.AreEqual ("foobar", timeSeries.Tags ["host"]);
+		}
+
+		[Test]
+		public void TestDisablingRoot()
+		{
+			var longConsumer = new AccumulatingConsumer<long> ();
+
+			var collector = getRootCollector (longConsumer, new NullConsumer<float>());
+
+			var disabled = collector
+				.Disabled ()
+				.WithTag ("host", "foobar");
+
+			var metric = disabled.GetMetric ("foo.bar.baz");
+
+			metric.Record<long> (42);
+
+			var reenabled = metric.Reenabled ();
+			reenabled.Record<long> (43);
+
+			Assert.AreEqual (1, longConsumer.Data.Count);
+			Assert.AreEqual (43, longConsumer.Data [0].Value);
+		}
+
+		[Test]
+		public void TestDisablingChild()
+		{
+			var longConsumer = new AccumulatingConsumer<long> ();
+
+			var collector = getRootCollector (longConsumer, new NullConsumer<float>());
+
+			var disabled = collector
+				.WithTag ("host", "foobar")
+				.Disabled ();
+
+			var metric = disabled.GetMetric ("foo.bar.baz");
+
+			metric.Record<long> (42);
+
+			var reenabled = disabled
+				.Reenabled ()
+				.GetMetric("foo.bar.baz");
+			reenabled.Record<long> (43);
+
+			Assert.AreEqual (1, longConsumer.Data.Count);
+			Assert.AreEqual (43, longConsumer.Data [0].Value);
 		}
 	}
 }

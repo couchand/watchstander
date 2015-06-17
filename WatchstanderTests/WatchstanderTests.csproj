@@ -43,6 +43,7 @@
     <Compile Include="Unit\TaggerDictionaryTests.cs" />
     <Compile Include="Functional\MetricTests.cs" />
     <Compile Include="Common\MockConsumers.cs" />
+    <Compile Include="Functional\TimeSeriesTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
