@@ -21,23 +21,27 @@ namespace WatchstanderTests.Functional
 		[Test]
 		public void TestLimitName()
 		{
-			INameLimitable collector = getRootCollector ();
+			var collector = getRootCollector ();
 
-			var withFoo = collector.WithName ("foo");
+			var withHost = collector.WithTag ("host", "foobar");
+			var withFoo = withHost.WithName ("foo");
 			var withBar = withFoo.WithName ("bar");
+			var baz = withBar.GetMetric ("baz");
 
-			Assert.AreEqual ("foo.bar.", withBar.NamePrefix);
+			Assert.AreEqual ("foo.bar.baz", baz.Name);
 		}
 
 		[Test]
 		public void TestLimitNamePrefix()
 		{
-			INameLimitable collector = getRootCollector ();
+			var collector = getRootCollector ();
 
-			var withFoo = collector.WithNamePrefix ("foo");
+			var withHost = collector.WithTag ("host", "foobar");
+			var withFoo = withHost.WithNamePrefix ("foo");
 			var withBar = withFoo.WithName ("bar");
+			var baz = withBar.GetMetric ("baz");
 
-			Assert.AreEqual ("foobar.", withBar.NamePrefix);
+			Assert.AreEqual ("foobar.baz", baz.Name);
 		}
 
 		[Test]
@@ -46,10 +50,11 @@ namespace WatchstanderTests.Functional
 			var collector = getRootCollector ();
 
 			var withHost = collector.WithTag ("host", "foobar");
+			var baz = (CollectorMetric)withHost.GetMetric ("baz");
 
-			Assert.AreEqual (1, withHost.Tags.Count);
-			Assert.That (withHost.Tags.ContainsKey ("host"));
-			Assert.AreEqual ("foobar", withHost.Tags ["host"]);
+			Assert.AreEqual (1, baz.Tags.Count);
+			Assert.That (baz.Tags.ContainsKey ("host"));
+			Assert.AreEqual ("foobar", baz.Tags ["host"]);
 		}
 
 		[Test]
@@ -62,14 +67,15 @@ namespace WatchstanderTests.Functional
 			tags ["widget"] = "qux";
 
 			var withHost = collector.WithTags (tags.AsReadOnly ());
+			var baz = (CollectorMetric)withHost.GetMetric ("baz");
 
-			Assert.AreEqual (2, withHost.Tags.Count);
+			Assert.AreEqual (2, baz.Tags.Count);
 
-			Assert.That (withHost.Tags.ContainsKey ("host"));
-			Assert.AreEqual ("foobar", withHost.Tags ["host"]);
+			Assert.That (baz.Tags.ContainsKey ("host"));
+			Assert.AreEqual ("foobar", baz.Tags ["host"]);
 
-			Assert.That (withHost.Tags.ContainsKey ("widget"));
-			Assert.AreEqual ("qux", withHost.Tags ["widget"]);
+			Assert.That (baz.Tags.ContainsKey ("widget"));
+			Assert.AreEqual ("qux", baz.Tags ["widget"]);
 		}
 
 		[Test]
@@ -79,10 +85,11 @@ namespace WatchstanderTests.Functional
 
 			var hasHost = collector.WithTagger<bool> ("host", b => b ? "foobar" : "failed");
 			var withHost = hasHost.WithTag<bool> ("host", true);
+			var baz = (CollectorMetric)withHost.GetMetric ("baz");
 
-			Assert.AreEqual (1, withHost.Tags.Count);
-			Assert.That (withHost.Tags.ContainsKey ("host"));
-			Assert.AreEqual ("foobar", withHost.Tags ["host"]);
+			Assert.AreEqual (1, baz.Tags.Count);
+			Assert.That (baz.Tags.ContainsKey ("host"));
+			Assert.AreEqual ("foobar", baz.Tags ["host"]);
 		}
 
 		[Test]
@@ -90,13 +97,14 @@ namespace WatchstanderTests.Functional
 		{
 			var collector = getRootCollector ();
 
+			// TODO: needz moar type
 			Assert.Throws<Exception>(() => collector.GetMetric ("foo.bar.baz"));
 		}
 
 		[Test]
 		public void TestGetMetricNoTagsWithName()
 		{
-			var collector = (ICollector)getRootCollector ()
+			var collector = getRootCollector ()
 				.WithName ("foo")
 				.WithName ("bar");
 
@@ -106,12 +114,12 @@ namespace WatchstanderTests.Functional
 		[Test]
 		public void TestGetMetric()
 		{
-			var collector = (ICollector)((ICollector)getRootCollector ()
-				.WithTag ("host", "foobar"))
+			var collector = getRootCollector ()
+				.WithTag ("host", "foobar")
 				.WithName ("foo")
 				.WithName ("bar");
 
-			var metric = collector.GetMetric ("baz");
+			var metric = (CollectorMetric)collector.GetMetric ("baz");
 
 			Assert.AreEqual ("foo.bar.baz", metric.Name);
 			Assert.AreEqual (1, metric.Tags.Count);

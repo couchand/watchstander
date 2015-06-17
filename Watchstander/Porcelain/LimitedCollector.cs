@@ -7,14 +7,13 @@ namespace Watchstander.Porcelain
 {
 	public class LimitedCollector : ICollector
 	{
-		public RootCollector Root { get; }
+		private RootCollector Root { get; }
 
-		public NameLimiter NameLimiter { get; }
+		internal NameLimiter NameLimiter { get; }
 		public string NamePrefix => NameLimiter.NamePrefix;
 
-		public TagLimiter TagLimiter { get; }
+		internal TagLimiter TagLimiter { get; }
 		public IReadOnlyDictionary<string, string> Tags => TagLimiter.Tags;
-		public IReadOnlyList<string> TagKeys => TagLimiter.TagKeys;
 		public TaggerDictionary Taggers => TagLimiter.Taggers;
 
 		private string description;
@@ -43,32 +42,32 @@ namespace Watchstander.Porcelain
 			this.descriptionIsDirty = false;
 		}
 
-		public INameLimitable WithName(string name)
+		public ICollector WithName(string name)
 		{
 			return new LimitedCollector (Root, NameLimiter.Add(name), TagLimiter);
 		}
 
-		public INameLimitable WithNamePrefix(string namePrefix)
+		public ICollector WithNamePrefix(string namePrefix)
 		{
 			return new LimitedCollector (Root, NameLimiter.AddPrefix(namePrefix), TagLimiter);
 		}
 
-		public ITagLimitable WithTag (string tagKey, string tagValue)
+		public ICollector WithTag (string tagKey, string tagValue)
 		{
 			return new LimitedCollector(Root, NameLimiter, TagLimiter.Add(tagKey, tagValue));
 		}
 
-		public ITagLimitable WithTags (IReadOnlyDictionary<string, string> tags)
+		public ICollector WithTags (IReadOnlyDictionary<string, string> tags)
 		{
 			return new LimitedCollector(Root, NameLimiter, TagLimiter.Add(Tags));
 		}
 
-		public ITagLimitable WithTagger<TValue> (string tagKey, Func<TValue, string> tagger)
+		public ICollector WithTagger<TValue> (string tagKey, Func<TValue, string> tagger)
 		{
 			return new LimitedCollector(Root, NameLimiter, TagLimiter.Add (tagKey, tagger));
 		}
 
-		public ITagLimitable WithTag<TValue> (string tagKey, TValue tagValue)
+		public ICollector WithTag<TValue> (string tagKey, TValue tagValue)
 		{
 			if (Taggers == null || !Taggers.Contains<TValue> (tagKey))
 			{
@@ -85,7 +84,7 @@ namespace Watchstander.Porcelain
 			return WithTag (tagKey, value);
 		}
 
-		public CollectorMetric GetMetric(string name)
+		public ICollectorMetric GetMetric(string name)
 		{
 			if (Tags == null || Tags.Count == 0)
 			{

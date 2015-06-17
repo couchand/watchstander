@@ -5,21 +5,28 @@ using Watchstander.Plumbing;
 
 namespace Watchstander.Porcelain
 {
-	public class CollectorMetric : IMetric, ITagLimitable, IDescribable
+	public class CollectorMetric : ICollectorMetric
 	{
-		private readonly ICollector collector;
+		private readonly RootCollector collector;
 		private readonly string name;
 
 		private string description;
 		private bool descriptionIsDirty;
 
-		public TagLimiter Limiter { get; }
+		internal TagLimiter Limiter { get; }
 
 		public IReadOnlyDictionary<string, string> Tags => Limiter.Tags;
-		public IReadOnlyList<string> TagKeys => Limiter.TagKeys;
 		public TaggerDictionary Taggers => Limiter.Taggers;
 
-		public string Name => collector.NamePrefix + name;
+		public IReadOnlyList<string> TagKeys
+		{
+			get
+			{
+				throw new NotImplementedException("needz moar schema");
+			}
+		}
+
+		public string Name => name;
 		public string Description
 		{
 			get
@@ -36,7 +43,7 @@ namespace Watchstander.Porcelain
 		public Rate Rate => Rate.Unknown;
 		public string Unit => "";
 
-		public CollectorMetric (ICollector collector, string name, TagLimiter Limiter)
+		public CollectorMetric (RootCollector collector, string name, TagLimiter Limiter)
 		{
 			this.collector = collector;
 			this.Limiter = Limiter;
@@ -46,7 +53,7 @@ namespace Watchstander.Porcelain
 			this.descriptionIsDirty = false;
 		}
 
-		public CollectorMetric (CollectorMetric copy, TagLimiter Limiter)
+		private CollectorMetric (CollectorMetric copy, TagLimiter Limiter)
 		{
 			this.Limiter = Limiter;
 
@@ -57,24 +64,24 @@ namespace Watchstander.Porcelain
 			this.descriptionIsDirty = copy.descriptionIsDirty;
 		}
 
-		public ITagLimitable WithTag (string tagKey, string tagValue)
+		public ICollectorMetric WithTag (string tagKey, string tagValue)
 		{
 			return new CollectorMetric(this, Limiter.Add(tagKey, tagValue));
 		}
 
-		public ITagLimitable WithTags (IReadOnlyDictionary<string, string> tags)
+		public ICollectorMetric WithTags (IReadOnlyDictionary<string, string> tags)
 		{
 			return new CollectorMetric(this, Limiter.Add(tags));
 		}
 
-		public ITagLimitable WithTagger<TValue> (string tagKey, Func<TValue, string> tagger)
+		public ICollectorMetric WithTagger<TValue> (string tagKey, Func<TValue, string> tagger)
 		{
-			return null;
+			return new CollectorMetric(this, Limiter.Add(tagKey, tagger));
 		}
 
-		public ITagLimitable WithTag<TValue> (string tagKey, TValue tagValue)
+		public ICollectorMetric WithTag<TValue> (string tagKey, TValue tagValue)
 		{
-			return null;
+			throw new NotImplementedException ("collector metric needz tags");
 		}
 	}
 }
