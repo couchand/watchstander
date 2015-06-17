@@ -9,18 +9,14 @@ namespace Watchstander.Porcelain
 	{
 		public static ICollector LimitCollectorName (ICollector parent, string namePrefix)
 		{
-			// TODO: use twine?
-
 			if (parent is RootCollector)
 			{
-				return new LimitedCollector ((RootCollector)parent, namePrefix, new TagLimiter());
+				return new LimitedCollector ((RootCollector)parent, new NameLimiter(namePrefix), new TagLimiter());
 			}
 			else if (parent is LimitedCollector)
 			{
 				var limited = parent as LimitedCollector;
-				var newName = limited.NamePrefix + namePrefix;
-
-				return new LimitedCollector (limited.Root, newName, new TagLimiter(limited.Tags, null));
+				return new LimitedCollector (limited.Root, limited.NameLimiter.AddPrefix(namePrefix), new TagLimiter(limited.Tags, null));
 			}
 			else
 			{
@@ -40,14 +36,14 @@ namespace Watchstander.Porcelain
 		{
 			if (parent is RootCollector)
 			{
-				return new LimitedCollector ((RootCollector)parent, "", new TagLimiter(tags, null));
+				return new LimitedCollector ((RootCollector)parent, new NameLimiter(), new TagLimiter(tags, null));
 			}
 			else if (parent is LimitedCollector)
 			{
 				var limited = parent as LimitedCollector;
-				var newLimiter = limited.Limiter.Add (tags);
+				var newLimiter = limited.TagLimiter.Add (tags);
 
-				return new LimitedCollector (limited.Root, "", newLimiter);
+				return new LimitedCollector (limited.Root, limited.NameLimiter, newLimiter);
 			}
 			else
 			{
@@ -62,14 +58,14 @@ namespace Watchstander.Porcelain
 			{
 				var newLimiter = new TagLimiter ().Add (tagKey, tagger);
 
-				return new LimitedCollector ((RootCollector)parent, "", newLimiter);
+				return new LimitedCollector ((RootCollector)parent, new NameLimiter(), newLimiter);
 			}
 			else if (parent is LimitedCollector)
 			{
 				var limited = parent as LimitedCollector;
-				var newLimiter = limited.Limiter.Add (tagKey, tagger);
+				var newLimiter = limited.TagLimiter.Add (tagKey, tagger);
 
-				return new LimitedCollector(limited.Root, limited.NamePrefix, newLimiter);
+				return new LimitedCollector(limited.Root, limited.NameLimiter, newLimiter);
 			}
 			else
 			{
@@ -84,7 +80,7 @@ namespace Watchstander.Porcelain
 			{
 				var limited = parent as LimitedCollector;
 
-				return new CollectorMetric(limited.Root, limited.NamePrefix + name, limited.Limiter);
+				return new CollectorMetric(limited.Root, limited.NameLimiter.Resolve(name), limited.TagLimiter);
 			}
 			else
 			{

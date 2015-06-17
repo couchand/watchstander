@@ -73,6 +73,7 @@
     <Compile Include="Porcelain\ITagLimitable.cs" />
     <Compile Include="Porcelain\IDescribable.cs" />
     <Compile Include="Porcelain\TagLimiter.cs" />
+    <Compile Include="Porcelain\NameLimiter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

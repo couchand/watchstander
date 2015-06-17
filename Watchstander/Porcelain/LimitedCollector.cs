@@ -8,13 +8,14 @@ namespace Watchstander.Porcelain
 	public class LimitedCollector : ICollector
 	{
 		public RootCollector Root { get; }
-		public string NamePrefix { get; }
 
-		public TagLimiter Limiter { get; }
+		public NameLimiter NameLimiter { get; }
+		public string NamePrefix => NameLimiter.NamePrefix;
 
-		public IReadOnlyDictionary<string, string> Tags => Limiter.Tags;
-		public IReadOnlyList<string> TagKeys => Limiter.TagKeys;
-		public TaggerDictionary Taggers => Limiter.Taggers;
+		public TagLimiter TagLimiter { get; }
+		public IReadOnlyDictionary<string, string> Tags => TagLimiter.Tags;
+		public IReadOnlyList<string> TagKeys => TagLimiter.TagKeys;
+		public TaggerDictionary Taggers => TagLimiter.Taggers;
 
 		private string description;
 		private bool descriptionIsDirty;
@@ -32,12 +33,11 @@ namespace Watchstander.Porcelain
 			}
 		}
 
-		public LimitedCollector (RootCollector Root, string NamePrefix, TagLimiter Limiter)
+		public LimitedCollector (RootCollector Root, NameLimiter NameLimiter, TagLimiter TagLimiter)
 		{
 			this.Root = Root;
-			this.NamePrefix = NamePrefix;
-
-			this.Limiter = Limiter;
+			this.NameLimiter = NameLimiter;
+			this.TagLimiter = TagLimiter;
 
 			this.description = null;
 			this.descriptionIsDirty = false;
