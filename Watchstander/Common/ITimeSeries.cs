@@ -9,7 +9,7 @@ namespace Watchstander.Common
 		string Description { get; }
 
 		IMetric Metric { get; }
-		IReadOnlyDictionary<string, string> TagValues { get; }
+		IReadOnlyDictionary<string, string> Tags { get; }
 	}
 }
 

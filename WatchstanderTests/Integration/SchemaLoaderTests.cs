@@ -52,7 +52,7 @@ namespace WatchstanderTests.Integration
 			Assert.NotNull (metric.Description);
 			Assert.AreNotEqual (metric.Description, timeSeries [0].Description);
 
-			Assert.Greater (timeSeries [0].TagValues.Count, 0);
+			Assert.Greater (timeSeries [0].Tags.Count, 0);
 		}
 	}
 }

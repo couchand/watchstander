@@ -79,7 +79,7 @@ namespace Watchstander.Plumbing
 
 		public string Metric => timeSeries.Metric.Name;
 
-		public IReadOnlyDictionary<string, string> Tags => timeSeries.TagValues;
+		public IReadOnlyDictionary<string, string> Tags => timeSeries.Tags;
 
 		public string Value
 		{

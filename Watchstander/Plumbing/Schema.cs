@@ -77,7 +77,7 @@ namespace Watchstander.Plumbing
 		public IMetric Metric { get; }
 		public string Description { get; set; }
 
-		public IReadOnlyDictionary<string, string> TagValues => tagValues.AsReadOnly();
+		public IReadOnlyDictionary<string, string> Tags => tagValues.AsReadOnly();
 
 		private IDictionary<string, string> tagValues;
 

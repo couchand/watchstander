@@ -23,7 +23,7 @@ namespace WatchstanderTests.Unit
 	{
 		public string Description { get; set; }
 		public IMetric Metric { get; set; }
-		public IReadOnlyDictionary<string, string> TagValues { get; set; }
+		public IReadOnlyDictionary<string, string> Tags { get; set; }
 	}
 
 	[TestFixture]
@@ -118,7 +118,7 @@ namespace WatchstanderTests.Unit
 			{
 				Description = otherDescription,
 				Metric = someMetric,
-				TagValues = tags.AsReadOnly()
+				Tags = tags.AsReadOnly()
 			};
 
 			var metadata = MetadataFactory.GetDescription (someTimeSeries);
