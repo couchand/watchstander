@@ -6,6 +6,7 @@ a toolkit for bosun
   * introduction
   * a warning
   * getting started
+  * running the tests
   * api reference
 
 introduction
@@ -100,6 +101,14 @@ Roughly equivalent using the currently implemented classes would be:
     api.PutMetadata(metadata);
 
 Which works, but obviously isn't ideal.
+
+running the tests
+-----------------
+
+The integration tests require a Bosun instance with the default
+configuration available on localhost (that is, we can make HTTP requests
+to localhost:8070/api).  If you need another setup to run the tests
+locally you are welcome to introduce some indirection here.
 
 api reference
 -------------
