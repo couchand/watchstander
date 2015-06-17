@@ -13,9 +13,9 @@ introduction
 ------------
 
 Watchstander is a toolkit for interacting with OpenTSDB generally, and
-Bosun specifically.  Bosun is a monitoring dashboard built on top of
-OpenTSDB, see [bosun.org](http://bosun.org).  The need for a flexible,
-efficient client has driven the development of this library.
+Bosun specifically.  Bosun is a monitoring and alerting system built on
+top of OpenTSDB, see [bosun.org](http://bosun.org).  The need for a
+flexible, efficient client has driven the development of this library.
 
 Watchstander is built to be hackable so you can use it in whatever way
 you'd like to get your data into Bosun.  There are three main levels
@@ -34,10 +34,10 @@ the expected schema.  You can specify this schema in a configuration
 section of code or load it dynamically from an established Bosun server.
 
 Complete adoption means using the highest-level API, the porcelain layer
-which will be constructed out of the building blocks of the plumbing
-layer API.  It will provide the fully-feature client-facing abstractions
-around metrics, including client-side aggregation, metric name and tag
-limiting, and worker management.
+constructed out of the building blocks of the plumbing layer API.  It
+provides the fully-featured abstractions needed to provide clients with
+effortless metrics servicing, including client-side aggregation, metric
+name and tag limiting, and worker management.
 
 a warning
 ---------
@@ -58,17 +58,19 @@ interfaces in `Common`.
 
 Eventually we'll want to be able to do something like this to get started:
 
-    using Watchstander;
+```csharp
+using Watchstander;
 
-    var options = new CollectorOptions(new Uri(myBosunUrl));
-    var collector = new Collector(options)
-        .WithName("application")
-        .WithTag("host", hostname);
+var options = new CollectorOptions(new Uri(myBosunUrl));
+var collector = Bosun.Collector(options)
+    .WithName("application")
+    .WithTag("host", hostname);
 
-    var myCounter = collector.Register(new Counter("foo", "times fooed"));
-    myCounter.Description = "The number of times we fooed something.";
+var myCounter = collector.Register(new Counter("foo", "times fooed"));
+myCounter.Description = "The number of times we fooed something.";
 
-    myCounter.Increment();
+myCounter.Increment();
+```
 
 Which of course, would report the metric `application.foo` to the Bosun
 instance at `myBosunUrl` with the tag key `"host"` having the value of
@@ -77,28 +79,31 @@ including the description, rate, and units.
 
 Roughly equivalent using the currently implemented classes would be:
 
-    using Watchstander.Common;
-    using Watchstander.Plumbing;
-    using Watchstander.Porcelain;
-    using Watchstander.Utilities;
+```csharp
+using Watchstander.Common;
+using Watchstander.Plumbing;
+using Watchstander.Porcelain;
+using Watchstander.Utilities;
 
-    var options = new ApiOptions(new Uri(myBosunUrl), new SerializerOptions());
-    var api = new Api(options);
+var options = new ApiOptions(new Uri(myBosunUrl), new SerializerOptions());
+var api = new Api(options);
 
-    var collector = new RootCollector(api, api)
-      .WithTag("host", hostname);
+var collector = new RootCollector(api, api)
+    .WithName("application")
+    .WithTag("host", hostname);
 
-    var myCounter = collector.GetMetric("application.foo");
-    myCounter.Record<long>(1);
+var myCounter = collector.GetMetric("foo");
+myCounter.Record<long>(1);
 
-    myCounter.Description = "The number of times we fooed something.";
+myCounter.Description = "The number of times we fooed something.";
 
-    var rate = myCounter.GetRateMetadata();
-    var unit = myCounter.GetUnitMetadata();
-    var desc = myCounter.GetDescriptionMetadata();
+var rate = myCounter.GetRateMetadata();
+var unit = myCounter.GetUnitMetadata();
+var desc = myCounter.GetDescriptionMetadata();
 
-    var metadata = new List<IMetadata>{ rate, unit, desc };
-    api.PutMetadata(metadata);
+var metadata = new List<IMetadata>{ rate, unit, desc };
+api.PutMetadata(metadata);
+```
 
 Which works, but obviously isn't ideal.
 
@@ -107,7 +112,7 @@ running the tests
 
 The integration tests require a Bosun instance with the default
 configuration available on localhost (that is, we can make HTTP requests
-to localhost:8070/api).  If you need another setup to run the tests
+to `localhost:8070/api`).  If you need another setup to run the tests
 locally you are welcome to introduce some indirection here.
 
 api reference
