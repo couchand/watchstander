@@ -71,6 +71,24 @@ namespace Watchstander.Porcelain
 			// TODO: check for schema-completeness
 			return new CollectorTimeSeries(this, Tags);
 		}
+
+		public ICollectorTimeSeries GetTimeSeries(string tagKey, string tagValue)
+		{
+			var updated = Limiter.Add (tagKey, tagValue);
+			return new CollectorTimeSeries (this, updated.Tags);
+		}
+
+		public ICollectorTimeSeries GetTimeSeries(IReadOnlyDictionary<string, string> tags)
+		{
+			var updated = Limiter.Add (tags);
+			return new CollectorTimeSeries (this, updated.Tags);
+		}
+
+		public ICollectorTimeSeries GetTimeSeries<TValue>(string tagKey, TValue tagValue)
+		{
+			var updated = Limiter.Resolve (tagKey, tagValue);
+			return new CollectorTimeSeries (this, updated.Tags);
+		}
 	}
 }
 

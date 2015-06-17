@@ -29,7 +29,6 @@ namespace WatchstanderTests.Functional
 
 			var withWidget = (CollectorMetric)metric.WithTag ("widget", "qux");
 
-			Assert.LessOrEqual (2, withWidget.Tags.Count);
 			Assert.That (withWidget.Tags.ContainsKey ("widget"));
 			Assert.AreEqual ("qux", withWidget.Tags ["widget"]);
 		}
@@ -44,8 +43,6 @@ namespace WatchstanderTests.Functional
 			tags ["fruit"] = "banana";
 
 			var withTags = (CollectorMetric)metric.WithTags (tags.AsReadOnly ());
-
-			Assert.LessOrEqual (2, withTags.Tags.Count);
 
 			Assert.That (withTags.Tags.ContainsKey ("widget"));
 			Assert.AreEqual ("qux", withTags.Tags ["widget"]);
@@ -62,7 +59,6 @@ namespace WatchstanderTests.Functional
 			var hasFruit = metric.WithTagger<bool> ("fruit", b => b ? "banana" : "apple");
 			var withFruit = (CollectorMetric) hasFruit.WithTag<bool> ("fruit", true);
 
-			Assert.LessOrEqual (1, withFruit.Tags.Count);
 			Assert.That (withFruit.Tags.ContainsKey ("host"));
 			Assert.AreEqual ("foobar", withFruit.Tags ["host"]);
 		}
@@ -75,6 +71,53 @@ namespace WatchstanderTests.Functional
 			var timeSeries = metric.GetTimeSeries ();
 
 			Assert.AreSame (metric, timeSeries.Metric);
+		}
+
+		[Test]
+		public void TestGetTimeSeriesTagByValue()
+		{
+			var metric = getMetric ();
+
+			var timeSeries = metric.GetTimeSeries ("widget", "qux");
+
+			Assert.AreSame (metric, timeSeries.Metric);
+
+			Assert.That (timeSeries.Tags.ContainsKey ("widget"));
+			Assert.AreEqual ("qux", timeSeries.Tags ["widget"]);
+		}
+
+		[Test]
+		public void TestGetTimeSeriesTagsByDictionary()
+		{
+			var metric = getMetric ();
+
+			var tags = new Dictionary<string, string> ();
+			tags ["widget"] = "qux";
+			tags ["fruit"] = "banana";
+
+			var timeSeries = metric.GetTimeSeries (tags.AsReadOnly());
+
+			Assert.AreSame (metric, timeSeries.Metric);
+
+			Assert.That (timeSeries.Tags.ContainsKey ("widget"));
+			Assert.AreEqual ("qux", timeSeries.Tags ["widget"]);
+
+			Assert.That (timeSeries.Tags.ContainsKey ("fruit"));
+			Assert.AreEqual ("banana", timeSeries.Tags ["fruit"]);
+		}
+
+		[Test]
+		public void TestGetTimeSeriesTagByTagger()
+		{
+			var metric = getMetric ();
+			var hasFruit = metric.WithTagger<bool> ("fruit", b => b ? "banana" : "apple");
+
+			var timeSeries = hasFruit.GetTimeSeries<bool> ("fruit", true);
+
+			Assert.AreSame (hasFruit, timeSeries.Metric);
+
+			Assert.That (timeSeries.Tags.ContainsKey ("fruit"));
+			Assert.AreEqual ("banana", timeSeries.Tags ["fruit"]);
 		}
 	}
 }
