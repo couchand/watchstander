@@ -71,6 +71,7 @@
     <Compile Include="Porcelain\IDescribable.cs" />
     <Compile Include="Porcelain\TagLimiter.cs" />
     <Compile Include="Porcelain\NameLimiter.cs" />
+    <Compile Include="Porcelain\CollectorTimeSeries.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

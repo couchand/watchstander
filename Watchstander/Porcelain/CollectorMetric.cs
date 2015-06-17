@@ -65,6 +65,12 @@ namespace Watchstander.Porcelain
 		{
 			return new CollectorMetric (this, Limiter.Resolve (tagKey, tagValue));
 		}
+
+		public ICollectorTimeSeries GetTimeSeries()
+		{
+			// TODO: check for schema-completeness
+			return new CollectorTimeSeries(this, Tags);
+		}
 	}
 }
 

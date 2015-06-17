@@ -25,6 +25,12 @@ namespace Watchstander.Porcelain
 
 		ICollectorMetric WithTagger<TValue> (string tagKey, Func<TValue, string> tagger);
 		ICollectorMetric WithTag<TValue> (string tagKey, TValue tagValue);
+
+		ICollectorTimeSeries GetTimeSeries ();
+	}
+
+	public interface ICollectorTimeSeries : ITimeSeries, IDescribable
+	{
 	}
 }
 

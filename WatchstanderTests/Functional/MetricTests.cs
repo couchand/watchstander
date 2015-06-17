@@ -66,6 +66,16 @@ namespace WatchstanderTests.Functional
 			Assert.That (withFruit.Tags.ContainsKey ("host"));
 			Assert.AreEqual ("foobar", withFruit.Tags ["host"]);
 		}
+
+		[Test]
+		public void TestGetTimeSeriesNoTags()
+		{
+			var metric = getMetric ();
+
+			var timeSeries = metric.GetTimeSeries ();
+
+			Assert.AreSame (metric, timeSeries.Metric);
+		}
 	}
 }
 
