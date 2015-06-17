@@ -6,27 +6,9 @@ namespace Watchstander.Porcelain
 {
 	public class RootCollector : ICollector
 	{
-		private string description;
-		private bool descriptionIsDirty;
+		public string Description { get; set; }
 
-		public string Description
-		{
-			get
-			{
-				return description;
-			}
-			set
-			{
-				descriptionIsDirty = true;
-				description = value;
-			}
-		}
-
-		public RootCollector ()
-		{
-			this.description = null;
-			this.descriptionIsDirty = false;
-		}
+		public RootCollector () {}
 
 		public ICollector WithName(string name)
 		{

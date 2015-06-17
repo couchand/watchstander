@@ -10,9 +10,6 @@ namespace Watchstander.Porcelain
 		private readonly RootCollector collector;
 		private readonly string name;
 
-		private string description;
-		private bool descriptionIsDirty;
-
 		internal TagLimiter Limiter { get; }
 
 		public IReadOnlyDictionary<string, string> Tags => Limiter.Tags;
@@ -27,18 +24,7 @@ namespace Watchstander.Porcelain
 		}
 
 		public string Name => name;
-		public string Description
-		{
-			get
-			{
-				return description;
-			}
-			set
-			{
-				descriptionIsDirty = true;
-				description = value;
-			}
-		}
+		public string Description { get; set; }
 
 		public Rate Rate => Rate.Unknown;
 		public string Unit => "";
@@ -48,9 +34,6 @@ namespace Watchstander.Porcelain
 			this.collector = collector;
 			this.Limiter = Limiter;
 			this.name = name;
-
-			this.description = null;
-			this.descriptionIsDirty = false;
 		}
 
 		private CollectorMetric (CollectorMetric copy, TagLimiter Limiter)
@@ -60,8 +43,7 @@ namespace Watchstander.Porcelain
 			this.collector = copy.collector;
 			this.name = copy.name;
 
-			this.description = copy.description;
-			this.descriptionIsDirty = copy.descriptionIsDirty;
+			this.Description = copy.Description;
 		}
 
 		public ICollectorMetric WithTag (string tagKey, string tagValue)

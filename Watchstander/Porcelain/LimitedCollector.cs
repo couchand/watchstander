@@ -16,30 +16,13 @@ namespace Watchstander.Porcelain
 		public IReadOnlyDictionary<string, string> Tags => TagLimiter.Tags;
 		public TaggerDictionary Taggers => TagLimiter.Taggers;
 
-		private string description;
-		private bool descriptionIsDirty;
-
-		public string Description
-		{
-			get
-			{
-				return description;
-			}
-			set
-			{
-				descriptionIsDirty = true;
-				description = value;
-			}
-		}
+		public string Description { get; set; }
 
 		public LimitedCollector (RootCollector Root, NameLimiter NameLimiter, TagLimiter TagLimiter)
 		{
 			this.Root = Root;
 			this.NameLimiter = NameLimiter;
 			this.TagLimiter = TagLimiter;
-
-			this.description = null;
-			this.descriptionIsDirty = false;
 		}
 
 		public ICollector WithName(string name)
