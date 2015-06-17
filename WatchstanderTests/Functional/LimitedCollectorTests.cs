@@ -130,11 +130,47 @@ namespace WatchstanderTests.Functional
 		}
 
 		[Test]
-		public void TestGetTimeSeries()
+		public void TestGetTimeSeriesByValue()
 		{
 			var collector = getRootCollector ();
 
 			var timeSeries = collector.GetTimeSeries<long> ("foo.bar.baz", "host", "foobar");
+
+			Assert.AreEqual ("foo.bar.baz", timeSeries.Metric.Name);
+			Assert.AreEqual (1, timeSeries.Tags.Count);
+			Assert.That (timeSeries.Tags.ContainsKey ("host"));
+			Assert.AreEqual ("foobar", timeSeries.Tags ["host"]);
+		}
+
+		[Test]
+		public void TestGetTimeSeriesByDictionary()
+		{
+			var collector = getRootCollector ();
+
+			var tags = new Dictionary<string, string> ();
+			tags ["host"] = "foobar";
+			tags ["fruit"] = "banana";
+
+			var timeSeries = collector.GetTimeSeries<long> ("foo.bar.baz", tags.AsReadOnly());
+
+			Assert.AreEqual ("foo.bar.baz", timeSeries.Metric.Name);
+
+			Assert.AreEqual (2, timeSeries.Tags.Count);
+
+			Assert.That (timeSeries.Tags.ContainsKey ("host"));
+			Assert.AreEqual ("foobar", timeSeries.Tags ["host"]);
+
+			Assert.That (timeSeries.Tags.ContainsKey ("fruit"));
+			Assert.AreEqual ("banana", timeSeries.Tags ["fruit"]);
+		}
+
+		[Test]
+		public void TestGetTimeSeriesByTagger()
+		{
+			var collector = getRootCollector ()
+				.WithTagger<bool> ("host", b => b ? "foobar" : "failed");
+
+			var timeSeries = collector.GetTimeSeries<long, bool> ("foo.bar.baz", "host", true);
 
 			Assert.AreEqual ("foo.bar.baz", timeSeries.Metric.Name);
 			Assert.AreEqual (1, timeSeries.Tags.Count);
