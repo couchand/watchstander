@@ -44,7 +44,7 @@ namespace WatchstanderTests.Unit
 				TagKeys = tagKeys
 			};
 
-			var metadata = MetadataFactory.GetDescription (someMetric);
+			var metadata = someMetric.GetDescriptionMetadata ();
 
 			Assert.AreEqual ("foo.bar.baz", metadata.Metric);
 			Assert.AreEqual (wittyDescription, metadata.Value);
@@ -66,7 +66,7 @@ namespace WatchstanderTests.Unit
 				TagKeys = tagKeys
 			};
 
-			var metadata = MetadataFactory.GetRate (someMetric);
+			var metadata = someMetric.GetRateMetadata ();
 
 			Assert.AreEqual ("foo.bar.baz", metadata.Metric);
 			Assert.AreEqual (Rate.Gauge.ToMetadataString(), metadata.Value);
@@ -88,7 +88,7 @@ namespace WatchstanderTests.Unit
 				TagKeys = tagKeys
 			};
 
-			var metadata = MetadataFactory.GetUnit (someMetric);
+			var metadata = someMetric.GetUnitMetadata ();
 
 			Assert.AreEqual ("foo.bar.baz", metadata.Metric);
 			Assert.AreEqual ("baz", metadata.Value);
@@ -121,7 +121,7 @@ namespace WatchstanderTests.Unit
 				Tags = tags.AsReadOnly()
 			};
 
-			var metadata = MetadataFactory.GetDescription (someTimeSeries);
+			var metadata = someTimeSeries.GetDescriptionMetadata ();
 
 			Assert.AreEqual ("foo.bar.baz", metadata.Metric);
 			Assert.AreEqual (otherDescription, metadata.Value);

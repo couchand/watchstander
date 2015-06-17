@@ -99,30 +99,30 @@ namespace Watchstander.Plumbing
 		}
 	}
 
-	public class MetadataFactory
+	public static class MetadataFactory
 	{
-		public static IMetadata GetUnit(IMetric metric)
+		public static IMetadata GetUnitMetadata(this IMetric metric)
 		{
 			var metadata = new MetricMetadata (metric);
 			metadata.Name = "unit";
 			return metadata;
 		}
 
-		public static IMetadata GetRate(IMetric metric)
+		public static IMetadata GetRateMetadata(this IMetric metric)
 		{
 			var metadata = new MetricMetadata (metric);
 			metadata.Name = "rate";
 			return metadata;
 		}
 
-		public static IMetadata GetDescription(IMetric metric)
+		public static IMetadata GetDescriptionMetadata(this IMetric metric)
 		{
 			var metadata = new MetricMetadata (metric);
 			metadata.Name = "desc";
 			return metadata;
 		}
 
-		public static IMetadata GetDescription(ITimeSeries timeSeries)
+		public static IMetadata GetDescriptionMetadata(this ITimeSeries timeSeries)
 		{
 			var metadata = new TimeSeriesMetadata (timeSeries);
 			metadata.Name = "desc";
