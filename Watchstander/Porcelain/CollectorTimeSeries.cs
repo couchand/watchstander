@@ -4,7 +4,7 @@ using Watchstander.Common;
 
 namespace Watchstander.Porcelain
 {
-	public class CollectorTimeSeries : ICollectorTimeSeries
+	public class CollectorTimeSeries<TData> : ICollectorTimeSeries<TData>
 	{
 		public string Description { get; set; }
 
@@ -23,6 +23,13 @@ namespace Watchstander.Porcelain
 
 		private static void validate(CollectorMetric metric, IReadOnlyDictionary<string, string> Tags)
 		{
+			var valueType = typeof(TData);
+			if (typeof(long) != valueType && typeof(float) != valueType)
+			{
+				// we don't deal in strings around here
+				throw new Exception("unknown data point type");
+			}
+
 			if (Tags == null || Tags.Count == 0)
 			{
 				// needz one tag

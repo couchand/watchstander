@@ -56,37 +56,37 @@ namespace Watchstander.Porcelain
 			return new CollectorMetric(this, Limiter.Add(tags));
 		}
 
-		public ICollectorMetric WithTagger<TValue> (string tagKey, Func<TValue, string> tagger)
+		public ICollectorMetric WithTagger<TTaggable> (string tagKey, Func<TTaggable, string> tagger)
 		{
 			return new CollectorMetric(this, Limiter.Add(tagKey, tagger));
 		}
 
-		public ICollectorMetric WithTag<TValue> (string tagKey, TValue tagValue)
+		public ICollectorMetric WithTag<TTaggable> (string tagKey, TTaggable tagValue)
 		{
 			return new CollectorMetric (this, Limiter.Resolve (tagKey, tagValue));
 		}
 
-		public ICollectorTimeSeries GetTimeSeries()
+		public ICollectorTimeSeries<TData> GetTimeSeries<TData>()
 		{
-			return new CollectorTimeSeries(this, Tags);
+			return new CollectorTimeSeries<TData>(collector, this, Tags);
 		}
 
-		public ICollectorTimeSeries GetTimeSeries(string tagKey, string tagValue)
+		public ICollectorTimeSeries<TData> GetTimeSeries<TData>(string tagKey, string tagValue)
 		{
 			var updated = Limiter.Add (tagKey, tagValue);
-			return new CollectorTimeSeries (this, updated.Tags);
+			return new CollectorTimeSeries<TData> (collector, this, updated.Tags);
 		}
 
-		public ICollectorTimeSeries GetTimeSeries(IReadOnlyDictionary<string, string> tags)
+		public ICollectorTimeSeries<TData> GetTimeSeries<TData>(IReadOnlyDictionary<string, string> tags)
 		{
 			var updated = Limiter.Add (tags);
-			return new CollectorTimeSeries (this, updated.Tags);
+			return new CollectorTimeSeries<TData> (collector, this, updated.Tags);
 		}
 
-		public ICollectorTimeSeries GetTimeSeries<TValue>(string tagKey, TValue tagValue)
+		public ICollectorTimeSeries<TData> GetTimeSeries<TData, TTaggable>(string tagKey, TTaggable tagValue)
 		{
 			var updated = Limiter.Resolve (tagKey, tagValue);
-			return new CollectorTimeSeries (this, updated.Tags);
+			return new CollectorTimeSeries<TData> (collector, this, updated.Tags);
 		}
 	}
 }

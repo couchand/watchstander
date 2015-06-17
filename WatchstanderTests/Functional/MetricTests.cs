@@ -68,7 +68,7 @@ namespace WatchstanderTests.Functional
 		{
 			var metric = getMetric ();
 
-			var timeSeries = metric.GetTimeSeries ();
+			var timeSeries = metric.GetTimeSeries<long> ();
 
 			Assert.AreSame (metric, timeSeries.Metric);
 		}
@@ -78,7 +78,7 @@ namespace WatchstanderTests.Functional
 		{
 			var metric = getMetric ();
 
-			var timeSeries = metric.GetTimeSeries ("widget", "qux");
+			var timeSeries = metric.GetTimeSeries<long> ("widget", "qux");
 
 			Assert.AreSame (metric, timeSeries.Metric);
 
@@ -95,7 +95,7 @@ namespace WatchstanderTests.Functional
 			tags ["widget"] = "qux";
 			tags ["fruit"] = "banana";
 
-			var timeSeries = metric.GetTimeSeries (tags.AsReadOnly());
+			var timeSeries = metric.GetTimeSeries<long> (tags.AsReadOnly());
 
 			Assert.AreSame (metric, timeSeries.Metric);
 
@@ -112,7 +112,7 @@ namespace WatchstanderTests.Functional
 			var metric = getMetric ();
 			var hasFruit = metric.WithTagger<bool> ("fruit", b => b ? "banana" : "apple");
 
-			var timeSeries = hasFruit.GetTimeSeries<bool> ("fruit", true);
+			var timeSeries = hasFruit.GetTimeSeries<long, bool> ("fruit", true);
 
 			Assert.AreSame (hasFruit, timeSeries.Metric);
 

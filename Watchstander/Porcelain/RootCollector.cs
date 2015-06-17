@@ -32,12 +32,12 @@ namespace Watchstander.Porcelain
 			return new LimitedCollector (this, new NameLimiter(), new TagLimiter ().Add(tags));
 		}
 
-		public ICollector WithTagger<TValue>(string tagKey, Func<TValue, string> tagger)
+		public ICollector WithTagger<TTaggable>(string tagKey, Func<TTaggable, string> tagger)
 		{
 			return new LimitedCollector (this, new NameLimiter(), new TagLimiter ().Add (tagKey, tagger));
 		}
 
-		public ICollector WithTag<TValue> (string tagKey, TValue tagValue)
+		public ICollector WithTag<TTaggable> (string tagKey, TTaggable tagValue)
 		{
 			// needz tagger
 			throw new Exception("you must provide a tagger");

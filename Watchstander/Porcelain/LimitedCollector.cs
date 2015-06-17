@@ -45,14 +45,14 @@ namespace Watchstander.Porcelain
 			return new LimitedCollector(Root, NameLimiter, TagLimiter.Add(Tags));
 		}
 
-		public ICollector WithTagger<TValue> (string tagKey, Func<TValue, string> tagger)
+		public ICollector WithTagger<TTaggable> (string tagKey, Func<TTaggable, string> tagger)
 		{
 			return new LimitedCollector(Root, NameLimiter, TagLimiter.Add (tagKey, tagger));
 		}
 
-		public ICollector WithTag<TValue> (string tagKey, TValue tagValue)
+		public ICollector WithTag<TTaggable> (string tagKey, TTaggable tagValue)
 		{
-			if (Taggers == null || !Taggers.Contains<TValue> (tagKey))
+			if (Taggers == null || !Taggers.Contains<TTaggable> (tagKey))
 			{
 				throw new ArgumentOutOfRangeException ("tagKey", tagKey, "You must provide a tagger.");
 			}
