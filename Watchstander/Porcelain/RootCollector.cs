@@ -32,22 +32,22 @@ namespace Watchstander.Porcelain
 			this.descriptionIsDirty = false;
 		}
 
-		public ICollector WithName(string namePrefix)
+		public INameLimitable WithName(string namePrefix)
 		{
 			return CollectorFactory.LimitCollectorName (this, namePrefix + ".");
 		}
 
-		public ICollector WithNamePrefix(string namePrefix)
+		public INameLimitable WithNamePrefix(string namePrefix)
 		{
 			return CollectorFactory.LimitCollectorName (this, namePrefix);
 		}
 
-		public ICollector WithTag (string tagKey, string tagValue)
+		public ITagLimitable WithTag (string tagKey, string tagValue)
 		{
 			return CollectorFactory.LimitCollectorTags (this, tagKey, tagValue);
 		}
 
-		public ICollector WithTags (IReadOnlyDictionary<string, string> tags)
+		public ITagLimitable WithTags (IReadOnlyDictionary<string, string> tags)
 		{
 			return CollectorFactory.LimitCollectorTags (this, tags);
 		}
@@ -58,12 +58,12 @@ namespace Watchstander.Porcelain
 			throw new Exception ("you must provide at least one tag");
 		}
 
-		public ICollector WithTagger<TValue>(string tagKey, Func<TValue, string> tagger)
+		public ITagLimitable WithTagger<TValue>(string tagKey, Func<TValue, string> tagger)
 		{
 			return CollectorFactory.LimitCollectorTags<TValue> (this, tagKey, tagger);
 		}
 
-		public ICollector WithTag<TValue> (string tagKey, TValue tagValue)
+		public ITagLimitable WithTag<TValue> (string tagKey, TValue tagValue)
 		{
 			// needz tagger
 			throw new Exception("you must provide a tagger");

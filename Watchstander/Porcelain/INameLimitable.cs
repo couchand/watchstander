@@ -6,8 +6,8 @@ namespace Watchstander.Porcelain
 	{
 		string NamePrefix { get; }
 
-		ICollector WithName (string namePrefix);
-		ICollector WithNamePrefix (string namePrefix);
+		INameLimitable WithName (string namePrefix);
+		INameLimitable WithNamePrefix (string namePrefix);
 	}
 }
 

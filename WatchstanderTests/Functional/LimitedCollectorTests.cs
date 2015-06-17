@@ -96,7 +96,7 @@ namespace WatchstanderTests.Functional
 		[Test]
 		public void TestGetMetricNoTagsWithName()
 		{
-			var collector = getRootCollector ()
+			var collector = (ICollector)getRootCollector ()
 				.WithName ("foo")
 				.WithName ("bar");
 
@@ -106,8 +106,8 @@ namespace WatchstanderTests.Functional
 		[Test]
 		public void TestGetMetric()
 		{
-			var collector = getRootCollector ()
-				.WithTag ("host", "foobar")
+			var collector = (ICollector)((ICollector)getRootCollector ()
+				.WithTag ("host", "foobar"))
 				.WithName ("foo")
 				.WithName ("bar");
 

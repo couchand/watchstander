@@ -77,6 +77,21 @@ namespace Watchstander.Porcelain
 				throw new Exception("unknown collector type!");
 			}
 		}
+
+		public static CollectorMetric GetLimitedMetric(ICollector parent, string name)
+		{
+			if (parent is LimitedCollector)
+			{
+				var limited = parent as LimitedCollector;
+
+				return new CollectorMetric(limited.Root, limited.NamePrefix + name, limited.Limiter);
+			}
+			else
+			{
+				// uh-oh!
+				throw new Exception("unknown/illegal collector type!");
+			}
+		}
 	}
 }
 

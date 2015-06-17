@@ -8,11 +8,11 @@ namespace Watchstander.Porcelain
 		IReadOnlyList<string> TagKeys { get; }
 		IReadOnlyDictionary<string, string> Tags { get; }
 
-		ICollector WithTag (string tagKey, string tagValue);
-		ICollector WithTags (IReadOnlyDictionary<string, string> tags);
+		ITagLimitable WithTag (string tagKey, string tagValue);
+		ITagLimitable WithTags (IReadOnlyDictionary<string, string> tags);
 
-		ICollector WithTagger<TValue> (string tagKey, Func<TValue, string> tagger);
-		ICollector WithTag<TValue> (string tagKey, TValue tagValue);
+		ITagLimitable WithTagger<TValue> (string tagKey, Func<TValue, string> tagger);
+		ITagLimitable WithTag<TValue> (string tagKey, TValue tagValue);
 	}
 }
 
