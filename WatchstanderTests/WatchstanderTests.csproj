@@ -42,12 +42,14 @@
     <Compile Include="Functional\LimitedCollectorTests.cs" />
     <Compile Include="Unit\TaggerDictionaryTests.cs" />
     <Compile Include="Functional\MetricTests.cs" />
+    <Compile Include="Common\MockConsumers.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Unit\" />
     <Folder Include="Integration\" />
     <Folder Include="Functional\" />
+    <Folder Include="Common\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

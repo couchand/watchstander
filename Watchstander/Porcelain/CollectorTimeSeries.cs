@@ -11,12 +11,14 @@ namespace Watchstander.Porcelain
 		public IMetric Metric => metric;
 		public IReadOnlyDictionary<string, string> Tags { get; }
 
+		private RootCollector collector;
 		private CollectorMetric metric;
 
-		public CollectorTimeSeries (CollectorMetric metric, IReadOnlyDictionary<string, string> Tags)
+		public CollectorTimeSeries (RootCollector collector, CollectorMetric metric, IReadOnlyDictionary<string, string> Tags)
 		{
 			validate(metric, Tags);
 
+			this.collector = collector;
 			this.metric = metric;
 			this.Tags = Tags;
 		}
@@ -37,6 +39,22 @@ namespace Watchstander.Porcelain
 			}
 
 			// TODO: check for schema-completeness
+		}
+
+		public void Record(TData value, DateTime now)
+		{
+			var dataPoint = new CollectedDataPoint<TData>(this, now, value);
+			var points = new List<IDataPoint<TData>> { dataPoint };
+
+			var consumer = collector as IDataPointConsumer<TData>;
+
+			if (consumer == null)
+			{
+				// should never happen
+				throw new Exception("unknown data point type & illegal state");
+			}
+
+			consumer.Consume(points);
 		}
 	}
 }

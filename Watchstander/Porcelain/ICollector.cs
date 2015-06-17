@@ -33,7 +33,7 @@ namespace Watchstander.Porcelain
 		ICollectorTimeSeries<TData> GetTimeSeries<TData, TTag> (string tagKey, TTag tagValue);
 	}
 
-	public interface ICollectorTimeSeries<TData> : ITimeSeries, IDescribable
+	public interface ICollectorTimeSeries<TData> : ITimeSeries, IRecorder<TData>, IDescribable
 	{
 	}
 }

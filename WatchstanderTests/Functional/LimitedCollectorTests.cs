@@ -8,6 +8,8 @@ using Watchstander.Common;
 using Watchstander.Porcelain;
 using Watchstander.Utilities;
 
+using WatchstanderTests.Common;
+
 namespace WatchstanderTests.Functional
 {
 	[TestFixture]
@@ -15,7 +17,7 @@ namespace WatchstanderTests.Functional
 	{
 		private ICollector getRootCollector()
 		{
-			return new RootCollector ();
+			return new RootCollector (new NullConsumer<long>(), new NullConsumer<float>());
 		}
 
 		[Test]

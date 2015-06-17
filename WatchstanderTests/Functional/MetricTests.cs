@@ -9,6 +9,7 @@ using Watchstander.Common;
 using Watchstander.Porcelain;
 using Watchstander.Utilities;
 
+using WatchstanderTests.Common;
 
 namespace WatchstanderTests.Functional
 {
@@ -17,7 +18,12 @@ namespace WatchstanderTests.Functional
 	{
 		private ICollectorMetric getMetric()
 		{
-			return new RootCollector ()
+			return getMetric (new NullConsumer<long> (), new NullConsumer<float> ());
+		}
+
+		private ICollectorMetric getMetric(IDataPointConsumer<long> longConsumer, IDataPointConsumer<float> floatConsumer)
+		{
+			return new RootCollector (longConsumer, floatConsumer)
 				.WithTag("host", "foobar")
 				.GetMetric("foo.bar.baz");
 		}
@@ -118,6 +124,29 @@ namespace WatchstanderTests.Functional
 
 			Assert.That (timeSeries.Tags.ContainsKey ("fruit"));
 			Assert.AreEqual ("banana", timeSeries.Tags ["fruit"]);
+		}
+
+		[Test]
+		public void TestRecord ()
+		{
+			var longConsumer = new AccumulatingConsumer<long> ();
+			var floatConsumer = new AccumulatingConsumer<float> ();
+
+			var metric = getMetric (longConsumer, floatConsumer);
+
+			metric.Record<long> (42);
+			metric.Record<float> (1.0f);
+			metric.Record<long> (43);
+			metric.Record<float> (2.0f);
+
+			Assert.AreEqual (2, longConsumer.Data.Count);
+			Assert.AreEqual (2, floatConsumer.Data.Count);
+
+			Assert.AreEqual (42, longConsumer.Data [0].Value);
+			Assert.AreEqual (43, longConsumer.Data [1].Value);
+
+			Assert.AreEqual (1.0f, floatConsumer.Data [0].Value);
+			Assert.AreEqual (2.0f, floatConsumer.Data [1].Value);
 		}
 	}
 }

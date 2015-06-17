@@ -1,14 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using Watchstander.Common;
 using Watchstander.Plumbing;
 
 namespace Watchstander.Porcelain
 {
-	public class RootCollector : ICollector
+	public class RootCollector : ICollector, IDataPointConsumer<long>, IDataPointConsumer<float>
 	{
 		public string Description { get; set; }
 
-		public RootCollector () {}
+		private IDataPointConsumer<long> longConsumer;
+		private IDataPointConsumer<float> floatConsumer;
+
+		public RootCollector (IDataPointConsumer<long> longConsumer, IDataPointConsumer<float> floatConsumer)
+		{
+			this.longConsumer = longConsumer;
+			this.floatConsumer = floatConsumer;
+		}
 
 		public ICollector WithName(string name)
 		{
@@ -46,6 +54,16 @@ namespace Watchstander.Porcelain
 		public ICollectorMetric GetMetric(string name)
 		{
 			return new CollectorMetric (this, name, new TagLimiter ());
+		}
+
+		public void Consume(IEnumerable<IDataPoint<long>> values)
+		{
+			longConsumer.Consume(values);
+		}
+
+		public void Consume(IEnumerable<IDataPoint<float>> values)
+		{
+			floatConsumer.Consume(values);
 		}
 	}
 }

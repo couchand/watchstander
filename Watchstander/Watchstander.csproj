@@ -73,6 +73,8 @@
     <Compile Include="Porcelain\NameLimiter.cs" />
     <Compile Include="Porcelain\CollectorTimeSeries.cs" />
     <Compile Include="Porcelain\CollectorExtensions.cs" />
+    <Compile Include="Porcelain\IRecorder.cs" />
+    <Compile Include="Porcelain\CollectedDataPoint.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
