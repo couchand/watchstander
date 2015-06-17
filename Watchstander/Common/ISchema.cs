@@ -8,7 +8,10 @@ namespace Watchstander.Common
 	/// </summary>
 	public interface ISchema
 	{
-		// Entries by metric name.
+		/// <summary>
+		/// The schema entries by metric name.
+		/// </summary>
+		/// <value></value>
 		IReadOnlyDictionary<string, ISchemaEntry> Entries { get; }
 	}
 
@@ -17,10 +20,16 @@ namespace Watchstander.Common
 	/// </summary>
 	public interface ISchemaEntry
 	{
-		// The metric metadata.
+		/// <summary>
+		/// Metadata about the metric.
+		/// </summary>
+		/// <value></value>
 		IMetric Metric { get; }
 
-		// All known series on this metric.
+		/// <summary>
+		/// All known time series on the metric.
+		/// </summary>
+		/// <value></value>
 		IReadOnlyList<ITimeSeries> TimeSeries { get; }
 	}
 }

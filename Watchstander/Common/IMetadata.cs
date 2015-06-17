@@ -8,16 +8,28 @@ namespace Watchstander.Common
 	/// </summary>
 	public interface IMetadata
 	{
-		// The metric name.
+		/// <summary>
+		/// The metric name this metadata applies to.
+		/// </summary>
+		/// <value></value>
 		string Metric { get; }
 
-		// Tags to specify the time series this metadata applies to.
+		/// <summary>
+		/// Tags to specify the time series this metadata applies to.
+		/// </summary>
+		/// <value></value>
 		IReadOnlyDictionary<string, string> Tags { get; }
 
-		// The name of the metadata (e.g. desc, rate, unit)
+		/// <summary>
+		/// The name of the metadata (e.g. desc, rate, unit).
+		/// </summary>
+		/// <value></value>
 		string Name { get; }
 
-		// The metadata value.
+		/// <summary>
+		/// The metadata value.
+		/// </summary>
+		/// <value></value>
 		string Value { get; }
 	}
 }
