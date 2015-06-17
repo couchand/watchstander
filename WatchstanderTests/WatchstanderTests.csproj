@@ -41,6 +41,7 @@
     <Compile Include="Unit\RateTests.cs" />
     <Compile Include="Functional\LimitedCollectorTests.cs" />
     <Compile Include="Unit\TaggerDictionaryTests.cs" />
+    <Compile Include="Functional\MetricTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

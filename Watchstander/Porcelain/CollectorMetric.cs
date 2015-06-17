@@ -63,7 +63,7 @@ namespace Watchstander.Porcelain
 
 		public ICollectorMetric WithTag<TValue> (string tagKey, TValue tagValue)
 		{
-			throw new NotImplementedException ("collector metric needz tags");
+			return new CollectorMetric (this, Limiter.Resolve (tagKey, tagValue));
 		}
 	}
 }

@@ -66,8 +66,8 @@ namespace WatchstanderTests.Functional
 			tags ["host"] = "foobar";
 			tags ["widget"] = "qux";
 
-			var withHost = collector.WithTags (tags.AsReadOnly ());
-			var baz = (CollectorMetric)withHost.GetMetric ("baz");
+			var withTags = collector.WithTags (tags.AsReadOnly ());
+			var baz = (CollectorMetric)withTags.GetMetric ("baz");
 
 			Assert.AreEqual (2, baz.Tags.Count);
 
