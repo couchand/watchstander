@@ -43,40 +43,29 @@ namespace Watchstander.Porcelain
 			this.descriptionIsDirty = false;
 		}
 
-		public INameLimitable WithName(string namePrefix)
+		public INameLimitable WithName(string name)
 		{
-			return CollectorFactory.LimitCollectorName (this, namePrefix + ".");
+			return new LimitedCollector (Root, NameLimiter.Add(name), TagLimiter);
 		}
 
 		public INameLimitable WithNamePrefix(string namePrefix)
 		{
-			return CollectorFactory.LimitCollectorName (this, namePrefix);
+			return new LimitedCollector (Root, NameLimiter.AddPrefix(namePrefix), TagLimiter);
 		}
 
 		public ITagLimitable WithTag (string tagKey, string tagValue)
 		{
-			return CollectorFactory.LimitCollectorTags (this, tagKey, tagValue);
+			return new LimitedCollector(Root, NameLimiter, TagLimiter.Add(tagKey, tagValue));
 		}
 
 		public ITagLimitable WithTags (IReadOnlyDictionary<string, string> tags)
 		{
-			return CollectorFactory.LimitCollectorTags (this, tags);
-		}
-
-		public CollectorMetric GetMetric(string name)
-		{
-			if (Tags == null || Tags.Count == 0)
-			{
-				// needz one tag
-				throw new Exception ("you must provide at least one tag");
-			}
-
-			return CollectorFactory.GetLimitedMetric(this, name);
+			return new LimitedCollector(Root, NameLimiter, TagLimiter.Add(Tags));
 		}
 
 		public ITagLimitable WithTagger<TValue> (string tagKey, Func<TValue, string> tagger)
 		{
-			return CollectorFactory.LimitCollectorTags<TValue> (this, tagKey, tagger);
+			return new LimitedCollector(Root, NameLimiter, TagLimiter.Add (tagKey, tagger));
 		}
 
 		public ITagLimitable WithTag<TValue> (string tagKey, TValue tagValue)
@@ -93,7 +82,18 @@ namespace Watchstander.Porcelain
 
 			var value = Taggers.Get (tagKey, tagValue);
 
-			return CollectorFactory.LimitCollectorTags (this, tagKey, value);
+			return WithTag (tagKey, value);
+		}
+
+		public CollectorMetric GetMetric(string name)
+		{
+			if (Tags == null || Tags.Count == 0)
+			{
+				// needz one tag
+				throw new Exception ("you must provide at least one tag");
+			}
+
+			return new CollectorMetric(Root, NameLimiter.Resolve(name), TagLimiter);
 		}
 	}
 }

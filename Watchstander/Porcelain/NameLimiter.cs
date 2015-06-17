@@ -9,7 +9,7 @@ namespace Watchstander.Porcelain
 		public NameLimiter ()
 			: this ("") {}
 
-		public NameLimiter (string NamePrefix)
+		private NameLimiter (string NamePrefix)
 		{
 			this.NamePrefix = NamePrefix;
 		}

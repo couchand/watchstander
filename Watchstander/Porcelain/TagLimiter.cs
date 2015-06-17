@@ -17,7 +17,7 @@ namespace Watchstander.Porcelain
 			this.Taggers = new TaggerDictionary();
 		}
 
-		public TagLimiter (IReadOnlyDictionary<string, string> Tags, TaggerDictionary Taggers)
+		private TagLimiter (IReadOnlyDictionary<string, string> Tags, TaggerDictionary Taggers)
 		{
 			this.Tags = Tags;
 			this.Taggers = Taggers;
