@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Watchstander.Porcelain;
 
-namespace Watchstander.Porcelain
+namespace Watchstander
 {
 	public static class CollectorExtensions
 	{

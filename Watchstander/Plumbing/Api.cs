@@ -23,7 +23,7 @@ namespace Watchstander.Plumbing
 		}
 	}
 
-	public class Api : IDataPointConsumer<long>, IDataPointConsumer<float>, IDataPointConsumer<string>
+	public class Api : IPipelineElement, IDataPointConsumer<string>
 	{
 		public static readonly string PUT_PATH 				= "/api/put";
 		public static readonly string PUT_METADATA_PATH 	= "/api/metadata/put";
@@ -124,7 +124,8 @@ namespace Watchstander.Plumbing
 					}
 				}
 
-				request.GetResponse ().Close ();
+				var response = request.GetResponse ();
+				response.Close ();
 			}
 			catch (WebException ex)
 			{

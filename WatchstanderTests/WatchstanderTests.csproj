@@ -46,6 +46,9 @@
     <Compile Include="Functional\TimeSeriesTests.cs" />
     <Compile Include="Unit\DataQueueTests.cs" />
     <Compile Include="Common\MockData.cs" />
+    <Compile Include="Integration\UsageExample.cs" />
+    <Compile Include="Common\MockFlusher.cs" />
+    <Compile Include="Unit\UriValidatorTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

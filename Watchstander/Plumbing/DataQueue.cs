@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using Watchstander.Common;
 
-namespace Watchstander.Porcelain
+namespace Watchstander.Plumbing
 {
 	public class DataQueue : IPipelineElement
 	{

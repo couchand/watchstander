@@ -4,7 +4,9 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 
+using Watchstander;
 using Watchstander.Common;
+using Watchstander.Plumbing;
 using Watchstander.Porcelain;
 using Watchstander.Utilities;
 
@@ -22,7 +24,7 @@ namespace WatchstanderTests.Functional
 
 		private ICollector getRootCollector(IPipelineElement consumer)
 		{
-			return new RootCollector (consumer);
+			return new RootCollector (consumer, new MockFlusher());
 		}
 
 		[Test]

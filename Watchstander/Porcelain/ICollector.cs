@@ -9,6 +9,8 @@ namespace Watchstander.Porcelain
 		ICollector Disabled ();
 		ICollector Reenabled ();
 
+		void Shutdown ();
+
 		ICollector WithName (string namePrefix);
 		ICollector WithNamePrefix (string namePrefix);
 

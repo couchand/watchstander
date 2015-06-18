@@ -10,10 +10,12 @@ namespace Watchstander.Porcelain
 		public string Description { get; set; }
 
 		private IPipelineElement consumer;
+		private IDisposable timer;
 
-		public RootCollector (IPipelineElement consumer)
+		public RootCollector (IPipelineElement consumer, IDisposable timer)
 		{
 			this.consumer = consumer;
+			this.timer = timer;
 		}
 
 		public ICollector Disabled()
@@ -25,6 +27,11 @@ namespace Watchstander.Porcelain
 		{
 			// we can be sure it's never been disabled
 			return this;
+		}
+
+		public void Shutdown()
+		{
+			timer.Dispose ();
 		}
 
 		public ICollector WithName(string name)

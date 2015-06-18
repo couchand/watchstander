@@ -38,6 +38,11 @@ namespace Watchstander.Porcelain
 			return new LimitedCollector(Root, NameLimiter, TagLimiter, true);
 		}
 
+		public void Shutdown()
+		{
+			Root.Shutdown ();
+		}
+
 		public ICollector WithName(string name)
 		{
 			return new LimitedCollector (Root, NameLimiter.Add(name), TagLimiter, Enabled);

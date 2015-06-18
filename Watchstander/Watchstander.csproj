@@ -72,11 +72,15 @@
     <Compile Include="Porcelain\TagLimiter.cs" />
     <Compile Include="Porcelain\NameLimiter.cs" />
     <Compile Include="Porcelain\CollectorTimeSeries.cs" />
-    <Compile Include="Porcelain\CollectorExtensions.cs" />
     <Compile Include="Porcelain\IRecorder.cs" />
     <Compile Include="Porcelain\CollectedDataPoint.cs" />
-    <Compile Include="Porcelain\DataQueue.cs" />
-    <Compile Include="Porcelain\IPipeline.cs" />
+    <Compile Include="Bosun.cs" />
+    <Compile Include="CollectorOptions.cs" />
+    <Compile Include="Plumbing\IPipeline.cs" />
+    <Compile Include="Plumbing\DataQueue.cs" />
+    <Compile Include="Plumbing\Flusher.cs" />
+    <Compile Include="CollectorExtensions.cs" />
+    <Compile Include="Plumbing\UriValidator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

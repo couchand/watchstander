@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading;
 
 using Watchstander.Common;
+using Watchstander.Plumbing;
 using Watchstander.Porcelain;
 using Watchstander.Utilities;
 
