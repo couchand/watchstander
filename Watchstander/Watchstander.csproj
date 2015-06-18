@@ -81,6 +81,8 @@
     <Compile Include="Plumbing\Flusher.cs" />
     <Compile Include="CollectorExtensions.cs" />
     <Compile Include="Plumbing\UriValidator.cs" />
+    <Compile Include="Plumbing\MetricValidator.cs" />
+    <Compile Include="Options\Options.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -88,6 +90,7 @@
     <Folder Include="Utilities\" />
     <Folder Include="Plumbing\" />
     <Folder Include="Porcelain\" />
+    <Folder Include="Options\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

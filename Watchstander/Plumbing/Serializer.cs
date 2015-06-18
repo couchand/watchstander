@@ -47,14 +47,14 @@ namespace Watchstander.Plumbing
 	/// </summary>
 	public class Serializer
 	{
-		private readonly Options options;
+		private readonly Jil.Options options;
 
 		public Serializer (SerializerOptions options)
 		{
 			this.options = GetSerializerOptions (options);
 		}
 
-		private static Options GetSerializerOptions(SerializerOptions options)
+		private static Jil.Options GetSerializerOptions(SerializerOptions options)
 		{
 			DateTimeFormat dateFormat;
 			switch (options.TimestampPrecision)
@@ -74,7 +74,7 @@ namespace Watchstander.Plumbing
 				break;
 			}
 
-			return new Options (
+			return new Jil.Options (
 				dateFormat: dateFormat,
 				prettyPrint: options.PrettyPrint,
 				excludeNulls: options.ExcludeNulls
