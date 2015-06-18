@@ -5,17 +5,15 @@ using Watchstander.Plumbing;
 
 namespace Watchstander.Porcelain
 {
-	public class RootCollector : ICollector, IDataPointConsumer<long>, IDataPointConsumer<float>
+	public class RootCollector : ICollector, IPipelineElement
 	{
 		public string Description { get; set; }
 
-		private IDataPointConsumer<long> longConsumer;
-		private IDataPointConsumer<float> floatConsumer;
+		private IPipelineElement consumer;
 
-		public RootCollector (IDataPointConsumer<long> longConsumer, IDataPointConsumer<float> floatConsumer)
+		public RootCollector (IPipelineElement consumer)
 		{
-			this.longConsumer = longConsumer;
-			this.floatConsumer = floatConsumer;
+			this.consumer = consumer;
 		}
 
 		public ICollector Disabled()
@@ -69,12 +67,12 @@ namespace Watchstander.Porcelain
 
 		public void Consume(IEnumerable<IDataPoint<long>> values)
 		{
-			longConsumer.Consume(values);
+			consumer.Consume(values);
 		}
 
 		public void Consume(IEnumerable<IDataPoint<float>> values)
 		{
-			floatConsumer.Consume(values);
+			consumer.Consume(values);
 		}
 	}
 }

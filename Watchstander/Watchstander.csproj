@@ -75,6 +75,7 @@
     <Compile Include="Porcelain\CollectorExtensions.cs" />
     <Compile Include="Porcelain\IRecorder.cs" />
     <Compile Include="Porcelain\CollectedDataPoint.cs" />
+    <Compile Include="Porcelain\IPipeline.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

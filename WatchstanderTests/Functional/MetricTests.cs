@@ -18,12 +18,12 @@ namespace WatchstanderTests.Functional
 	{
 		private ICollectorMetric getMetric()
 		{
-			return getMetric (new NullConsumer<long> (), new NullConsumer<float> ());
+			return getMetric (new NullPipelineElement());
 		}
 
-		private ICollectorMetric getMetric(IDataPointConsumer<long> longConsumer, IDataPointConsumer<float> floatConsumer)
+		private ICollectorMetric getMetric(IPipelineElement consumer)
 		{
-			return new RootCollector (longConsumer, floatConsumer)
+			return new RootCollector (consumer)
 				.WithTag("host", "foobar")
 				.GetMetric("foo.bar.baz");
 		}
@@ -129,32 +129,31 @@ namespace WatchstanderTests.Functional
 		[Test]
 		public void TestRecord ()
 		{
-			var longConsumer = new AccumulatingConsumer<long> ();
-			var floatConsumer = new AccumulatingConsumer<float> ();
+			var consumer = new AccumulatingPipelineElement ();
 
-			var metric = getMetric (longConsumer, floatConsumer);
+			var metric = getMetric (consumer);
 
 			metric.Record<long> (42);
 			metric.Record<float> (1.0f);
 			metric.Record<long> (43);
 			metric.Record<float> (2.0f);
 
-			Assert.AreEqual (2, longConsumer.Data.Count);
-			Assert.AreEqual (2, floatConsumer.Data.Count);
+			Assert.AreEqual (2, consumer.longConsumer.Data.Count);
+			Assert.AreEqual (2, consumer.floatConsumer.Data.Count);
 
-			Assert.AreEqual (42, longConsumer.Data [0].Value);
-			Assert.AreEqual (43, longConsumer.Data [1].Value);
+			Assert.AreEqual (42, consumer.longConsumer.Data [0].Value);
+			Assert.AreEqual (43, consumer.longConsumer.Data [1].Value);
 
-			Assert.AreEqual (1.0f, floatConsumer.Data [0].Value);
-			Assert.AreEqual (2.0f, floatConsumer.Data [1].Value);
+			Assert.AreEqual (1.0f, consumer.floatConsumer.Data [0].Value);
+			Assert.AreEqual (2.0f, consumer.floatConsumer.Data [1].Value);
 		}
 
 		[Test]
 		public void TestDisabling()
 		{
-			var longConsumer = new AccumulatingConsumer<long> ();
+			var consumer = new AccumulatingPipelineElement ();
 
-			var metric = getMetric (longConsumer, new NullConsumer<float>());
+			var metric = getMetric (consumer);
 
 			metric.Record<long> (42);
 
@@ -164,10 +163,10 @@ namespace WatchstanderTests.Functional
 			var reenabled = disabled.Reenabled ();
 			reenabled.Record<long> (43);
 
-			Assert.AreEqual (2, longConsumer.Data.Count);
+			Assert.AreEqual (2, consumer.longConsumer.Data.Count);
 
-			Assert.AreEqual (42, longConsumer.Data [0].Value);
-			Assert.AreEqual (43, longConsumer.Data [1].Value);
+			Assert.AreEqual (42, consumer.longConsumer.Data [0].Value);
+			Assert.AreEqual (43, consumer.longConsumer.Data [1].Value);
 		}
 	}
 }

@@ -17,12 +17,12 @@ namespace WatchstanderTests.Functional
 	{
 		private ICollector getRootCollector()
 		{
-			return getRootCollector (new NullConsumer<long> (), new NullConsumer<float> ());
+			return getRootCollector (new NullPipelineElement());
 		}
 
-		private ICollector getRootCollector(IDataPointConsumer<long> longConsumer, IDataPointConsumer<float> floatConsumer)
+		private ICollector getRootCollector(IPipelineElement consumer)
 		{
-			return new RootCollector (longConsumer, floatConsumer);
+			return new RootCollector (consumer);
 		}
 
 		[Test]
@@ -186,9 +186,9 @@ namespace WatchstanderTests.Functional
 		[Test]
 		public void TestDisablingRoot()
 		{
-			var longConsumer = new AccumulatingConsumer<long> ();
+			var consumer = new AccumulatingPipelineElement ();
 
-			var collector = getRootCollector (longConsumer, new NullConsumer<float>());
+			var collector = getRootCollector (consumer);
 
 			var disabled = collector
 				.Disabled ()
@@ -201,16 +201,16 @@ namespace WatchstanderTests.Functional
 			var reenabled = metric.Reenabled ();
 			reenabled.Record<long> (43);
 
-			Assert.AreEqual (1, longConsumer.Data.Count);
-			Assert.AreEqual (43, longConsumer.Data [0].Value);
+			Assert.AreEqual (1, consumer.longConsumer.Data.Count);
+			Assert.AreEqual (43, consumer.longConsumer.Data [0].Value);
 		}
 
 		[Test]
 		public void TestDisablingChild()
 		{
-			var longConsumer = new AccumulatingConsumer<long> ();
+			var consumer = new AccumulatingPipelineElement ();
 
-			var collector = getRootCollector (longConsumer, new NullConsumer<float>());
+			var collector = getRootCollector (consumer);
 
 			var disabled = collector
 				.WithTag ("host", "foobar")
@@ -225,8 +225,8 @@ namespace WatchstanderTests.Functional
 				.GetMetric("foo.bar.baz");
 			reenabled.Record<long> (43);
 
-			Assert.AreEqual (1, longConsumer.Data.Count);
-			Assert.AreEqual (43, longConsumer.Data [0].Value);
+			Assert.AreEqual (1, consumer.longConsumer.Data.Count);
+			Assert.AreEqual (43, consumer.longConsumer.Data [0].Value);
 		}
 	}
 }
