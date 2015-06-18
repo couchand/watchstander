@@ -8,40 +8,10 @@ using Watchstander.Common;
 using Watchstander.Plumbing;
 using Watchstander.Utilities;
 
+using WatchstanderTests.Common;
+
 namespace WatchstanderTests.Integration
 {
-	public class DataTest : IDataPoint<long>
-	{
-		public string Metric { get; }
-		public DateTime Timestamp { get; }
-		public long Value { get; }
-		public IReadOnlyDictionary<string, string> Tags { get; }
-
-		public DataTest(string metric, DateTime timestamp, long value, IReadOnlyDictionary<string, string> tags)
-		{
-			this.Metric = metric;
-			this.Timestamp = timestamp;
-			this.Value = value;
-			this.Tags = tags;
-		}
-	}
-
-	public class MetadataTest : IMetadata
-	{
-		public string Metric { get; }
-		public IReadOnlyDictionary<string, string> Tags { get; }
-		public string Name { get; }
-		public string Value { get; }
-
-		public MetadataTest(string metric, IReadOnlyDictionary<string, string> tags, string name, string value)
-		{
-			this.Metric = metric;
-			this.Tags = tags;
-			this.Name = name;
-			this.Value = value;
-		}
-	}
-
 	[TestFixture]
 	public class IntegrationTests
 	{
@@ -64,7 +34,7 @@ namespace WatchstanderTests.Integration
 
 			tags["host"] = "foobar";
 
-			var data = new DataTest(
+			var data = new DataTest<long>(
 				"foo.bar.baz",
 				DateTime.UtcNow,
 				420,
