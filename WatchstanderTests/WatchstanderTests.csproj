@@ -44,6 +44,7 @@
     <Compile Include="Functional\MetricTests.cs" />
     <Compile Include="Common\MockConsumers.cs" />
     <Compile Include="Functional\TimeSeriesTests.cs" />
+    <Compile Include="Unit\DataQueueTests.cs" />
     <Compile Include="Common\MockData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
