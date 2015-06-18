@@ -15,6 +15,8 @@ namespace WatchstanderTests.Integration
 	[TestFixture]
 	public class IntegrationTests
 	{
+		Random myRandom = new Random();
+
 		private Api GetApi()
 		{
 			var url = new Uri("http://localhost:8070");
@@ -34,10 +36,12 @@ namespace WatchstanderTests.Integration
 
 			tags["host"] = "foobar";
 
+			var bazCount = (long)Math.Floor (500 * myRandom.NextDouble () + 100);
+
 			var data = new DataTest<long>(
 				"foo.bar.baz",
 				DateTime.UtcNow,
-				420,
+				bazCount,
 				tags.AsReadOnly()
 			);
 

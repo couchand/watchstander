@@ -21,6 +21,7 @@ namespace WatchstanderTests.Integration
 			return api;
 		}
 
+		// fails until integration tests have passed and bosun metadata is indexed
 		[Test]
 		public void TestsLoadSchema ()
 		{

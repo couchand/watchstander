@@ -10,6 +10,8 @@ namespace WatchstanderTests.Integration
 	[TestFixture]
 	public class UsageExample
 	{
+		Random myRandom = new Random();
+
 		[Test]
 		public void UsageExampleTest ()
 		{
@@ -22,9 +24,14 @@ namespace WatchstanderTests.Integration
 			var integrationTests = collector.GetMetric ("integration")
  				.WithTagger<bool> ("fruit", b => b ? "banana" : "apple");
 
-			var bananas = integrationTests.GetTimeSeries<long, bool> ("fruit", true);
+			// i like bananas
+			var isBanana = myRandom.NextDouble() > 0.3 ? true : false;
 
-			bananas.Record (10);
+			var fruitCount = integrationTests.GetTimeSeries<long, bool> ("fruit", isBanana);
+
+			var count = (long)Math.Floor (10 * myRandom.NextDouble ());
+
+			fruitCount.Record (count);
 
 			collector.Shutdown ();
 		}
