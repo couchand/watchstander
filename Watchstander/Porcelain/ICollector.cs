@@ -20,25 +20,25 @@ namespace Watchstander.Porcelain
 		ICollector WithTagger<TTaggable> (string tagKey, Func<TTaggable, string> tagger);
 		ICollector WithTag<TTaggable> (string tagKey, TTaggable tagValue);
 
-		ICollectorMetric GetMetric (string metricName);
+		ICollectorMetric<TData> GetMetric<TData> (string metricName);
 	}
 
-	public interface ICollectorMetric : IMetric, IDescribable
+	public interface ICollectorMetric<TData> : IMetric, IDescribable
 	{
-		ICollectorMetric Disabled ();
-		ICollectorMetric Reenabled ();
+		ICollectorMetric<TData> Disabled ();
+		ICollectorMetric<TData> Reenabled ();
 
-		ICollectorMetric WithTag (string tagKey, string tagValue);
-		ICollectorMetric WithTags (IReadOnlyDictionary<string, string> tags);
+		ICollectorMetric<TData> WithTag (string tagKey, string tagValue);
+		ICollectorMetric<TData> WithTags (IReadOnlyDictionary<string, string> tags);
 
-		ICollectorMetric WithTagger<TTaggable> (string tagKey, Func<TTaggable, string> tagger);
-		ICollectorMetric WithTag<TTaggable> (string tagKey, TTaggable tagValue);
+		ICollectorMetric<TData> WithTagger<TTaggable> (string tagKey, Func<TTaggable, string> tagger);
+		ICollectorMetric<TData> WithTag<TTaggable> (string tagKey, TTaggable tagValue);
 
-		ICollectorTimeSeries<TData> GetTimeSeries<TData> ();
-		ICollectorTimeSeries<TData> GetTimeSeries<TData> (string tagKey, string tagValue);
-		ICollectorTimeSeries<TData> GetTimeSeries<TData> (IReadOnlyDictionary<string, string> tags);
+		ICollectorTimeSeries<TData> GetTimeSeries ();
+		ICollectorTimeSeries<TData> GetTimeSeries (string tagKey, string tagValue);
+		ICollectorTimeSeries<TData> GetTimeSeries (IReadOnlyDictionary<string, string> tags);
 
-		ICollectorTimeSeries<TData> GetTimeSeries<TData, TTag> (string tagKey, TTag tagValue);
+		ICollectorTimeSeries<TData> GetTimeSeries<TTag> (string tagKey, TTag tagValue);
 	}
 
 	public interface ICollectorTimeSeries<TData> : ITimeSeries, IRecorder<TData>, IDescribable

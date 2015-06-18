@@ -5,7 +5,7 @@ using Watchstander.Plumbing;
 
 namespace Watchstander.Porcelain
 {
-	public class CollectorMetric : ICollectorMetric
+	public class CollectorMetric<TData> : ICollectorMetric<TData>
 	{
 		private readonly RootCollector collector;
 		private readonly string name;
@@ -38,7 +38,7 @@ namespace Watchstander.Porcelain
 			this.enabled = enabled;
 		}
 
-		private CollectorMetric (CollectorMetric copy, TagLimiter Limiter, bool? enabled = null)
+		private CollectorMetric (CollectorMetric<TData> copy, TagLimiter Limiter, bool? enabled = null)
 		{
 			this.Limiter = Limiter;
 
@@ -49,54 +49,54 @@ namespace Watchstander.Porcelain
 			this.Description = copy.Description;
 		}
 
-		public ICollectorMetric Disabled()
+		public ICollectorMetric<TData> Disabled()
 		{
-			return new CollectorMetric(this, Limiter, false);
+			return new CollectorMetric<TData>(this, Limiter, false);
 		}
 
-		public ICollectorMetric Reenabled()
+		public ICollectorMetric<TData> Reenabled()
 		{
-			return new CollectorMetric(this, Limiter, true);
+			return new CollectorMetric<TData>(this, Limiter, true);
 		}
 
-		public ICollectorMetric WithTag (string tagKey, string tagValue)
+		public ICollectorMetric<TData> WithTag (string tagKey, string tagValue)
 		{
-			return new CollectorMetric(this, Limiter.Add(tagKey, tagValue));
+			return new CollectorMetric<TData>(this, Limiter.Add(tagKey, tagValue));
 		}
 
-		public ICollectorMetric WithTags (IReadOnlyDictionary<string, string> tags)
+		public ICollectorMetric<TData> WithTags (IReadOnlyDictionary<string, string> tags)
 		{
-			return new CollectorMetric(this, Limiter.Add(tags));
+			return new CollectorMetric<TData>(this, Limiter.Add(tags));
 		}
 
-		public ICollectorMetric WithTagger<TTaggable> (string tagKey, Func<TTaggable, string> tagger)
+		public ICollectorMetric<TData> WithTagger<TTaggable> (string tagKey, Func<TTaggable, string> tagger)
 		{
-			return new CollectorMetric(this, Limiter.Add(tagKey, tagger));
+			return new CollectorMetric<TData>(this, Limiter.Add(tagKey, tagger));
 		}
 
-		public ICollectorMetric WithTag<TTaggable> (string tagKey, TTaggable tagValue)
+		public ICollectorMetric<TData> WithTag<TTaggable> (string tagKey, TTaggable tagValue)
 		{
-			return new CollectorMetric (this, Limiter.Resolve (tagKey, tagValue));
+			return new CollectorMetric<TData> (this, Limiter.Resolve (tagKey, tagValue));
 		}
 
-		public ICollectorTimeSeries<TData> GetTimeSeries<TData>()
+		public ICollectorTimeSeries<TData> GetTimeSeries()
 		{
 			return new CollectorTimeSeries<TData>(collector, this, Tags, enabled);
 		}
 
-		public ICollectorTimeSeries<TData> GetTimeSeries<TData>(string tagKey, string tagValue)
+		public ICollectorTimeSeries<TData> GetTimeSeries(string tagKey, string tagValue)
 		{
 			var updated = Limiter.Add (tagKey, tagValue);
 			return new CollectorTimeSeries<TData> (collector, this, updated.Tags, enabled);
 		}
 
-		public ICollectorTimeSeries<TData> GetTimeSeries<TData>(IReadOnlyDictionary<string, string> tags)
+		public ICollectorTimeSeries<TData> GetTimeSeries(IReadOnlyDictionary<string, string> tags)
 		{
 			var updated = Limiter.Add (tags);
 			return new CollectorTimeSeries<TData> (collector, this, updated.Tags, enabled);
 		}
 
-		public ICollectorTimeSeries<TData> GetTimeSeries<TData, TTaggable>(string tagKey, TTaggable tagValue)
+		public ICollectorTimeSeries<TData> GetTimeSeries<TTaggable>(string tagKey, TTaggable tagValue)
 		{
 			var updated = Limiter.Resolve (tagKey, tagValue);
 			return new CollectorTimeSeries<TData> (collector, this, updated.Tags, enabled);

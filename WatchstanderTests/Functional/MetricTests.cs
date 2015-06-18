@@ -18,24 +18,24 @@ namespace WatchstanderTests.Functional
 	[TestFixture]
 	public class MetricTests
 	{
-		private ICollectorMetric getMetric()
+		private ICollectorMetric<TData> getMetric<TData>()
 		{
-			return getMetric (new NullPipelineElement());
+			return getMetric<TData> (new NullPipelineElement());
 		}
 
-		private ICollectorMetric getMetric(IPipelineElement consumer)
+		private ICollectorMetric<TData> getMetric<TData>(IPipelineElement consumer)
 		{
 			return new RootCollector (consumer, new MockFlusher())
 				.WithTag("host", "foobar")
-				.GetMetric("foo.bar.baz");
+				.GetMetric<TData>("foo.bar.baz");
 		}
 
 		[Test]
 		public void TestLimitTagByValue()
 		{
-			var metric = getMetric ();
+			var metric = getMetric<long> ();
 
-			var withWidget = (CollectorMetric)metric.WithTag ("widget", "qux");
+			var withWidget = (CollectorMetric<long>)metric.WithTag ("widget", "qux");
 
 			Assert.That (withWidget.Tags.ContainsKey ("widget"));
 			Assert.AreEqual ("qux", withWidget.Tags ["widget"]);
@@ -44,13 +44,13 @@ namespace WatchstanderTests.Functional
 		[Test]
 		public void TestLimitTagsByValueDictionary()
 		{
-			var metric = getMetric ();
+			var metric = getMetric<long> ();
 
 			var tags = new Dictionary<string, string> ();
 			tags ["widget"] = "qux";
 			tags ["fruit"] = "banana";
 
-			var withTags = (CollectorMetric)metric.WithTags (tags.AsReadOnly ());
+			var withTags = (CollectorMetric<long>)metric.WithTags (tags.AsReadOnly ());
 
 			Assert.That (withTags.Tags.ContainsKey ("widget"));
 			Assert.AreEqual ("qux", withTags.Tags ["widget"]);
@@ -62,10 +62,10 @@ namespace WatchstanderTests.Functional
 		[Test]
 		public void TestLimitTagByTagger()
 		{
-			var metric = getMetric ();
+			var metric = getMetric<long> ();
 
 			var hasFruit = metric.WithTagger<bool> ("fruit", b => b ? "banana" : "apple");
-			var withFruit = (CollectorMetric) hasFruit.WithTag<bool> ("fruit", true);
+			var withFruit = (CollectorMetric<long>) hasFruit.WithTag<bool> ("fruit", true);
 
 			Assert.That (withFruit.Tags.ContainsKey ("host"));
 			Assert.AreEqual ("foobar", withFruit.Tags ["host"]);
@@ -74,9 +74,9 @@ namespace WatchstanderTests.Functional
 		[Test]
 		public void TestGetTimeSeriesNoTags()
 		{
-			var metric = getMetric ();
+			var metric = getMetric<long> ();
 
-			var timeSeries = metric.GetTimeSeries<long> ();
+			var timeSeries = metric.GetTimeSeries ();
 
 			Assert.AreSame (metric, timeSeries.Metric);
 		}
@@ -84,9 +84,9 @@ namespace WatchstanderTests.Functional
 		[Test]
 		public void TestGetTimeSeriesTagByValue()
 		{
-			var metric = getMetric ();
+			var metric = getMetric<long> ();
 
-			var timeSeries = metric.GetTimeSeries<long> ("widget", "qux");
+			var timeSeries = metric.GetTimeSeries ("widget", "qux");
 
 			Assert.AreSame (metric, timeSeries.Metric);
 
@@ -97,13 +97,13 @@ namespace WatchstanderTests.Functional
 		[Test]
 		public void TestGetTimeSeriesTagsByDictionary()
 		{
-			var metric = getMetric ();
+			var metric = getMetric<long> ();
 
 			var tags = new Dictionary<string, string> ();
 			tags ["widget"] = "qux";
 			tags ["fruit"] = "banana";
 
-			var timeSeries = metric.GetTimeSeries<long> (tags.AsReadOnly());
+			var timeSeries = metric.GetTimeSeries (tags.AsReadOnly());
 
 			Assert.AreSame (metric, timeSeries.Metric);
 
@@ -117,10 +117,10 @@ namespace WatchstanderTests.Functional
 		[Test]
 		public void TestGetTimeSeriesTagByTagger()
 		{
-			var metric = getMetric ();
+			var metric = getMetric<long> ();
 			var hasFruit = metric.WithTagger<bool> ("fruit", b => b ? "banana" : "apple");
 
-			var timeSeries = hasFruit.GetTimeSeries<long, bool> ("fruit", true);
+			var timeSeries = hasFruit.GetTimeSeries<bool> ("fruit", true);
 
 			Assert.AreSame (hasFruit, timeSeries.Metric);
 
@@ -133,12 +133,13 @@ namespace WatchstanderTests.Functional
 		{
 			var consumer = new AccumulatingPipelineElement ();
 
-			var metric = getMetric (consumer);
+			var longMetric = getMetric<long> (consumer);
+			var floatMetric = getMetric<float> (consumer);
 
-			metric.Record<long> (42);
-			metric.Record<float> (1.0f);
-			metric.Record<long> (43);
-			metric.Record<float> (2.0f);
+			longMetric.Record (42);
+			floatMetric.Record (1.0f);
+			longMetric.Record (43);
+			floatMetric.Record (2.0f);
 
 			Assert.AreEqual (2, consumer.longConsumer.Data.Count);
 			Assert.AreEqual (2, consumer.floatConsumer.Data.Count);
@@ -155,7 +156,7 @@ namespace WatchstanderTests.Functional
 		{
 			var consumer = new AccumulatingPipelineElement ();
 
-			var metric = getMetric (consumer);
+			var metric = getMetric<long> (consumer);
 
 			metric.Record<long> (42);
 

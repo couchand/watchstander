@@ -21,13 +21,13 @@ namespace WatchstanderTests.Integration
 				.WithTag ("host", "foobar")
 				.WithName ("tests");
 			
-			var integrationTests = collector.GetMetric ("integration")
+			var integrationTests = collector.GetMetric<long> ("integration")
  				.WithTagger<bool> ("fruit", b => b ? "banana" : "apple");
 
 			// i like bananas
 			var isBanana = myRandom.NextDouble() > 0.3 ? true : false;
 
-			var fruitCount = integrationTests.GetTimeSeries<long, bool> ("fruit", isBanana);
+			var fruitCount = integrationTests.GetTimeSeries<bool> ("fruit", isBanana);
 
 			var count = (long)Math.Floor (10 * myRandom.NextDouble ());
 

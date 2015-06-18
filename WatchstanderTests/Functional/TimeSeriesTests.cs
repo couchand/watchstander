@@ -18,16 +18,16 @@ namespace WatchstanderTests.Functional
 	[TestFixture]
 	public class TimeSeriesTests
 	{
-		private ICollectorMetric getMetric()
+		private ICollectorMetric<TData> getMetric<TData>()
 		{
-			return getMetric (new NullPipelineElement());
+			return getMetric<TData> (new NullPipelineElement());
 		}
 
-		private ICollectorMetric getMetric(IPipelineElement consumer)
+		private ICollectorMetric<TData> getMetric<TData>(IPipelineElement consumer)
 		{
 			return new RootCollector (consumer, new MockFlusher())
 				.WithTag("host", "foobar")
-				.GetMetric("foo.bar.baz");
+				.GetMetric<TData>("foo.bar.baz");
 		}
 
 		[Test]
@@ -35,10 +35,10 @@ namespace WatchstanderTests.Functional
 		{
 			var consumer = new AccumulatingPipelineElement ();
 
-			var longTimeSeries = getMetric (consumer)
-				.GetTimeSeries<long>();
-			var floatTimeSeries = getMetric (consumer)
-				.GetTimeSeries<float>();
+			var longTimeSeries = getMetric<long> (consumer)
+				.GetTimeSeries();
+			var floatTimeSeries = getMetric<float> (consumer)
+				.GetTimeSeries();
 
 			longTimeSeries.Record (42);
 			floatTimeSeries.Record (1.0f);
@@ -60,8 +60,8 @@ namespace WatchstanderTests.Functional
 		{
 			var consumer = new AccumulatingPipelineElement ();
 
-			var timeSeries = getMetric (consumer)
-				.GetTimeSeries<long>();
+			var timeSeries = getMetric<long> (consumer)
+				.GetTimeSeries();
 
 			timeSeries.Record (42);
 

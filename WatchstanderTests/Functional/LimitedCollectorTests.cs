@@ -35,7 +35,7 @@ namespace WatchstanderTests.Functional
 			var withHost = collector.WithTag ("host", "foobar");
 			var withFoo = withHost.WithName ("foo");
 			var withBar = withFoo.WithName ("bar");
-			var baz = withBar.GetMetric ("baz");
+			var baz = withBar.GetMetric<long> ("baz");
 
 			Assert.AreEqual ("foo.bar.baz", baz.Name);
 		}
@@ -48,7 +48,7 @@ namespace WatchstanderTests.Functional
 			var withHost = collector.WithTag ("host", "foobar");
 			var withFoo = withHost.WithNamePrefix ("foo");
 			var withBar = withFoo.WithName ("bar");
-			var baz = withBar.GetMetric ("baz");
+			var baz = withBar.GetMetric<long> ("baz");
 
 			Assert.AreEqual ("foobar.baz", baz.Name);
 		}
@@ -59,7 +59,7 @@ namespace WatchstanderTests.Functional
 			var collector = getRootCollector ();
 
 			var withHost = collector.WithTag ("host", "foobar");
-			var baz = (CollectorMetric)withHost.GetMetric ("baz");
+			var baz = (CollectorMetric<long>)withHost.GetMetric<long> ("baz");
 
 			Assert.AreEqual (1, baz.Tags.Count);
 			Assert.That (baz.Tags.ContainsKey ("host"));
@@ -76,7 +76,7 @@ namespace WatchstanderTests.Functional
 			tags ["widget"] = "qux";
 
 			var withTags = collector.WithTags (tags.AsReadOnly ());
-			var baz = (CollectorMetric)withTags.GetMetric ("baz");
+			var baz = (CollectorMetric<long>)withTags.GetMetric<long> ("baz");
 
 			Assert.AreEqual (2, baz.Tags.Count);
 
@@ -94,7 +94,7 @@ namespace WatchstanderTests.Functional
 
 			var hasHost = collector.WithTagger<bool> ("host", b => b ? "foobar" : "failed");
 			var withHost = hasHost.WithTag<bool> ("host", true);
-			var baz = (CollectorMetric)withHost.GetMetric ("baz");
+			var baz = (CollectorMetric<long>)withHost.GetMetric<long> ("baz");
 
 			Assert.AreEqual (1, baz.Tags.Count);
 			Assert.That (baz.Tags.ContainsKey ("host"));
@@ -128,7 +128,7 @@ namespace WatchstanderTests.Functional
 				.WithName ("foo")
 				.WithName ("bar");
 
-			var metric = (CollectorMetric)collector.GetMetric ("baz");
+			var metric = (CollectorMetric<long>)collector.GetMetric<long> ("baz");
 
 			Assert.AreEqual ("foo.bar.baz", metric.Name);
 			Assert.AreEqual (1, metric.Tags.Count);
@@ -196,7 +196,7 @@ namespace WatchstanderTests.Functional
 				.Disabled ()
 				.WithTag ("host", "foobar");
 
-			var metric = disabled.GetMetric ("foo.bar.baz");
+			var metric = disabled.GetMetric<long> ("foo.bar.baz");
 
 			metric.Record<long> (42);
 
@@ -218,13 +218,13 @@ namespace WatchstanderTests.Functional
 				.WithTag ("host", "foobar")
 				.Disabled ();
 
-			var metric = disabled.GetMetric ("foo.bar.baz");
+			var metric = disabled.GetMetric<long> ("foo.bar.baz");
 
 			metric.Record<long> (42);
 
 			var reenabled = disabled
 				.Reenabled ()
-				.GetMetric("foo.bar.baz");
+				.GetMetric<long> ("foo.bar.baz");
 			reenabled.Record<long> (43);
 
 			Assert.AreEqual (1, consumer.longConsumer.Data.Count);

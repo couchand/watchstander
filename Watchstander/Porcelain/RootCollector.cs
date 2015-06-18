@@ -67,9 +67,9 @@ namespace Watchstander.Porcelain
 			throw new Exception("you must provide a tagger");
 		}
 
-		public ICollectorMetric GetMetric(string name)
+		public ICollectorMetric<TData> GetMetric<TData>(string name)
 		{
-			return new CollectorMetric (this, name, new TagLimiter (), true);
+			return new CollectorMetric<TData> (this, name, new TagLimiter (), true);
 		}
 
 		public void Consume(IEnumerable<IDataPoint<long>> values)

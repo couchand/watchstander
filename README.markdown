@@ -93,8 +93,8 @@ var collector = Bosun.Collector(options)
     .WithName("application")
     .WithTag("host", hostname);
 
-var myCounter = collector.GetMetric("foo");
-myCounter.Record<long>(1);
+var myCounter = collector.GetMetric<long>("foo");
+myCounter.Record(1);
 ```
 
 Which would record your data point but not the metadata.  To do that,

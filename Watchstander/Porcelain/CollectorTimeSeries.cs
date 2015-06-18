@@ -12,11 +12,11 @@ namespace Watchstander.Porcelain
 		public IReadOnlyDictionary<string, string> Tags { get; }
 
 		private RootCollector collector;
-		private CollectorMetric metric;
+		private CollectorMetric<TData> metric;
 
 		private bool enabled;
 
-		internal CollectorTimeSeries (RootCollector collector, CollectorMetric metric, IReadOnlyDictionary<string, string> Tags, bool enabled)
+		internal CollectorTimeSeries (RootCollector collector, CollectorMetric<TData> metric, IReadOnlyDictionary<string, string> Tags, bool enabled)
 		{
 			validate(metric, Tags);
 
@@ -44,7 +44,7 @@ namespace Watchstander.Porcelain
 			return new CollectorTimeSeries<TData> (this, true);
 		}
 
-		private static void validate(CollectorMetric metric, IReadOnlyDictionary<string, string> Tags)
+		private static void validate(CollectorMetric<TData> metric, IReadOnlyDictionary<string, string> Tags)
 		{
 			var valueType = typeof(TData);
 			if (typeof(long) != valueType && typeof(float) != valueType)
