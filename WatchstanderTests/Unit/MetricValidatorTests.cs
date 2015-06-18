@@ -81,8 +81,8 @@ namespace WatchstanderTests.Unit
 		MetricValidator getLengthValidator()
 		{
 			var opts = new MetricValidatorOptions ();
-			opts.MinimumLength = 3;
-			opts.MaximumLength = 9;
+			opts.NameLengthMinimum = 3;
+			opts.NameLengthMaximum = 9;
 			return new MetricValidator (opts);
 		}
 
@@ -117,6 +117,39 @@ namespace WatchstanderTests.Unit
 		public void TestJustRight(string metricName)
 		{
 			var validator = getLengthValidator ();
+			Assert.DoesNotThrow (() => validator.ValidateName (metricName));
+		}
+
+		MetricValidator getSegmentsValidator()
+		{
+			var opts = new MetricValidatorOptions ();
+			opts.NameSegmentsMinimum = 2;
+			opts.NameSegmentsMaximum = 3;
+			return new MetricValidator (opts);
+		}
+
+		[Test]
+		[TestCase("foo")]
+		public void TestTooFewSegments(string metricName)
+		{
+			var validator = getSegmentsValidator ();
+			Assert.Throws<Exception> (() => validator.ValidateName (metricName));
+		}
+
+		[Test]
+		[TestCase("foo.bar.baz.qux")]
+		public void TestTooManySegments(string metricName)
+		{
+			var validator = getSegmentsValidator ();
+			Assert.Throws<Exception> (() => validator.ValidateName (metricName));
+		}
+
+		[Test]
+		[TestCase("foo.bar")]
+		[TestCase("foo.bar.baz")]
+		public void TestJustRightSegments(string metricName)
+		{
+			var validator = getSegmentsValidator ();
 			Assert.DoesNotThrow (() => validator.ValidateName (metricName));
 		}
 	}
