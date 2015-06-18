@@ -38,7 +38,7 @@ namespace Watchstander.Porcelain
 			return new TagLimiter (newTags, Taggers);
 		}
 
-		public TagLimiter Add<TValue>(string tagKey, Func<TValue, string> tagger)
+		public TagLimiter Add<TTag>(string tagKey, Func<TTag, string> tagger)
 		{
 			var newTaggers = new TaggerDictionary (Taggers);
 			newTaggers.Add(tagKey, tagger);
@@ -46,9 +46,9 @@ namespace Watchstander.Porcelain
 			return new TagLimiter(Tags, newTaggers);
 		}
 
-		public TagLimiter Resolve<TValue>(string tagKey, TValue tagValue)
+		public TagLimiter Resolve<TTag>(string tagKey, TTag tagValue)
 		{
-			if (Taggers == null || !Taggers.Contains<TValue> (tagKey))
+			if (Taggers == null || !Taggers.Contains<TTag> (tagKey))
 			{
 				throw new ArgumentOutOfRangeException ("tagKey", tagKey, "You must provide a tagger.");
 			}

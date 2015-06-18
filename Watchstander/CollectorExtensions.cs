@@ -24,10 +24,10 @@ namespace Watchstander
 			return metric.GetTimeSeries (tags);
 		}
 
-		public static ICollectorTimeSeries<TData> GetTimeSeries<TData, TValue> (this ICollector collector, string metricName, string tagKey, TValue tagValue)
+		public static ICollectorTimeSeries<TData> GetTimeSeries<TData, TTag> (this ICollector collector, string metricName, string tagKey, TTag tagValue)
 		{
 			var metric = collector.GetMetric<TData> (metricName);
-			return metric.GetTimeSeries<TValue> (tagKey, tagValue);
+			return metric.GetTimeSeries<TTag> (tagKey, tagValue);
 		}
 
 		public static void Record<TData> (this ICollectorMetric<TData> metric, TData data)
