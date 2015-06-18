@@ -50,10 +50,12 @@ As always, the only true documentation is the code.
 getting started
 ---------------
 
-There's very little porcelain yet, so you're mostly stuck with the raw
-plumbing.  The `Api` class will be your friend.  If you want to work
-with metadata you might check out the `MetadataFactory` or the
-`SchemaLoader`.  In any case you'll want to be familiar with the
+While there is a loose framework of porcelain available, much of the
+most useful bits have yet to be implemented.  You're mostly stuck with
+an assemblage of the basic bits at the moment.  In case you feel like
+diving into the raw plumbing, the `Api` class will be your friend.  If
+you want to work with metadata you might check out the `MetadataFactory`
+or the `SchemaLoader`.  In any case you'll want to be familiar with the
 interfaces in `Common`.
 
 Eventually we'll want to be able to do something like this to get started:
@@ -64,11 +66,14 @@ using Watchstander;
 var options = new CollectorOptions(new Uri(myBosunUrl));
 var collector = Bosun.Collector(options)
     .WithName("application")
-    .WithTag("host", hostname);
+    .WithTag("host", hostname)
+    .WithSchema(schema => {
+        schema
+          .GetMetric("foo", Rate.Counter, "times fooed")
+          .Description = "The number of times we fooed something.";
+    });
 
-var myCounter = collector.Register(new Counter("foo", "times fooed"));
-myCounter.Description = "The number of times we fooed something.";
-
+var myCounter = collector.GetMetric("foo");
 myCounter.Increment();
 ```
 
@@ -80,20 +85,24 @@ including the description, rate, and units.
 Roughly equivalent using the currently implemented classes would be:
 
 ```csharp
-using Watchstander.Common;
-using Watchstander.Plumbing;
-using Watchstander.Porcelain;
-using Watchstander.Utilities;
+using Watchstander;
 
-var options = new ApiOptions(new Uri(myBosunUrl), new SerializerOptions());
-var api = new Api(options);
+var options = new CollectorOptions(new Uri(myBosunUrl)));
 
-var collector = new RootCollector(api, api)
+var collector = Bosun.Collector(options)
     .WithName("application")
     .WithTag("host", hostname);
 
 var myCounter = collector.GetMetric("foo");
 myCounter.Record<long>(1);
+```
+
+Which would record your data point but not the metadata.  To do that,
+you'd need the plumbing.
+
+```csharp
+using Watchstander.Common;
+using Watchstander.Plumbing;
 
 myCounter.Description = "The number of times we fooed something.";
 
@@ -102,6 +111,8 @@ var unit = myCounter.GetUnitMetadata();
 var desc = myCounter.GetDescriptionMetadata();
 
 var metadata = new List<IMetadata>{ rate, unit, desc };
+
+// assuming you have a handle on the api object inside the above collector
 api.PutMetadata(metadata);
 ```
 
