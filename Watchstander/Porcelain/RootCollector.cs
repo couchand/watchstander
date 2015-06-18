@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Watchstander.Common;
 using Watchstander.Plumbing;
 
@@ -74,11 +75,13 @@ namespace Watchstander.Porcelain
 
 		public void Consume(IEnumerable<IDataPoint<long>> values)
 		{
+			Console.WriteLine ("RootCollector consuming " + values.Count() + " data points");
 			consumer.Consume(values);
 		}
 
 		public void Consume(IEnumerable<IDataPoint<float>> values)
 		{
+			Console.WriteLine ("RootCollector consuming " + values.Count() + " data points");
 			consumer.Consume(values);
 		}
 	}
