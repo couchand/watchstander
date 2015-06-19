@@ -88,7 +88,7 @@ namespace WatchstanderTests.Functional
 
 			var timeSeries = metric.GetTimeSeries ("widget", "qux");
 
-			Assert.AreSame (metric, timeSeries.Metric);
+			Assert.AreEqual (metric.Name, timeSeries.Metric.Name);
 
 			Assert.That (timeSeries.Tags.ContainsKey ("widget"));
 			Assert.AreEqual ("qux", timeSeries.Tags ["widget"]);
@@ -105,7 +105,7 @@ namespace WatchstanderTests.Functional
 
 			var timeSeries = metric.GetTimeSeries (tags.AsReadOnly());
 
-			Assert.AreSame (metric, timeSeries.Metric);
+			Assert.AreEqual (metric.Name, timeSeries.Metric.Name);
 
 			Assert.That (timeSeries.Tags.ContainsKey ("widget"));
 			Assert.AreEqual ("qux", timeSeries.Tags ["widget"]);
@@ -120,9 +120,9 @@ namespace WatchstanderTests.Functional
 			var metric = getMetric<long> ();
 			var hasFruit = metric.WithTagger<bool> ("fruit", b => b ? "banana" : "apple");
 
-			var timeSeries = hasFruit.GetTimeSeries<bool> ("fruit", true);
+			var timeSeries = hasFruit.GetTimeSeries ("fruit", true);
 
-			Assert.AreSame (hasFruit, timeSeries.Metric);
+			Assert.AreEqual (hasFruit.Name, timeSeries.Metric.Name);
 
 			Assert.That (timeSeries.Tags.ContainsKey ("fruit"));
 			Assert.AreEqual ("banana", timeSeries.Tags ["fruit"]);

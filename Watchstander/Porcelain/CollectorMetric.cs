@@ -83,24 +83,6 @@ namespace Watchstander.Porcelain
 		{
 			return new CollectorTimeSeries<TData>(collector, this, Tags, enabled);
 		}
-
-		public ICollectorTimeSeries<TData> GetTimeSeries(string tagKey, string tagValue)
-		{
-			var updated = Limiter.Add (tagKey, tagValue);
-			return new CollectorTimeSeries<TData> (collector, this, updated.Tags, enabled);
-		}
-
-		public ICollectorTimeSeries<TData> GetTimeSeries(IReadOnlyDictionary<string, string> tags)
-		{
-			var updated = Limiter.Add (tags);
-			return new CollectorTimeSeries<TData> (collector, this, updated.Tags, enabled);
-		}
-
-		public ICollectorTimeSeries<TData> GetTimeSeries<TTaggable>(string tagKey, TTaggable tagValue)
-		{
-			var updated = Limiter.Resolve (tagKey, tagValue);
-			return new CollectorTimeSeries<TData> (collector, this, updated.Tags, enabled);
-		}
 	}
 }
 

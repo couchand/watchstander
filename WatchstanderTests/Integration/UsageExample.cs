@@ -31,7 +31,7 @@ namespace WatchstanderTests.Integration
 			// i like bananas
 			var isBanana = myRandom.NextDouble() > 0.3 ? true : false;
 
-			var fruitCount = integrationTests.GetTimeSeries<bool> ("fruit", isBanana);
+			var fruitCount = integrationTests.GetTimeSeries ("fruit", isBanana);
 
 			var count = (long)Math.Floor (10 * myRandom.NextDouble ());
 

@@ -35,10 +35,6 @@ namespace Watchstander.Porcelain
 		ICollectorMetric<TData> WithTag<TTaggable> (string tagKey, TTaggable tagValue);
 
 		ICollectorTimeSeries<TData> GetTimeSeries ();
-		ICollectorTimeSeries<TData> GetTimeSeries (string tagKey, string tagValue);
-		ICollectorTimeSeries<TData> GetTimeSeries (IReadOnlyDictionary<string, string> tags);
-
-		ICollectorTimeSeries<TData> GetTimeSeries<TTag> (string tagKey, TTag tagValue);
 	}
 
 	public interface ICollectorTimeSeries<TData> : ITimeSeries, IRecorder<TData>, IDescribable

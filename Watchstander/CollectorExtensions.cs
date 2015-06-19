@@ -26,8 +26,25 @@ namespace Watchstander
 
 		public static ICollectorTimeSeries<TData> GetTimeSeries<TData, TTag> (this ICollector collector, string metricName, string tagKey, TTag tagValue)
 		{
-			var metric = collector.GetMetric<TData> (metricName);
-			return metric.GetTimeSeries<TTag> (tagKey, tagValue);
+			var metric = collector
+				.GetMetric<TData> (metricName)
+				.WithTag<TTag> (tagKey, tagValue);
+			return metric.GetTimeSeries();
+		}
+
+		public static ICollectorTimeSeries<TData> GetTimeSeries<TData> (this ICollectorMetric<TData> metric, string tagKey, string tagValue)
+		{
+			return metric.WithTag(tagKey, tagValue).GetTimeSeries();
+		}
+
+		public static ICollectorTimeSeries<TData> GetTimeSeries<TData> (this ICollectorMetric<TData> metric, IReadOnlyDictionary<string, string> tags)
+		{
+			return metric.WithTags(tags).GetTimeSeries();
+		}
+
+		public static ICollectorTimeSeries<TData> GetTimeSeries<TData, TTaggable> (this ICollectorMetric<TData> metric, string tagKey, TTaggable tagValue)
+		{
+			return metric.WithTag<TTaggable>(tagKey, tagValue).GetTimeSeries();
 		}
 
 		public static void Record<TData> (this ICollectorMetric<TData> metric, TData data)
