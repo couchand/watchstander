@@ -28,7 +28,7 @@ namespace WatchstanderTests.Integration
 		public void TestMetadataSender ()
 		{
 			var schema = new MockSchema ();
-			schema.AddEntry ("tests.integration", "The metadata sender sends metadata automatically.", Rate.Gauge, "items");
+			schema.AddEntry ("tests.usage", "The metadata sender sends metadata automatically.", Rate.Gauge, "items");
 
 			var options = new MetadataSenderOptions (schema, GetApi());
 			options.Timeout = TimeSpan.FromMilliseconds (100);

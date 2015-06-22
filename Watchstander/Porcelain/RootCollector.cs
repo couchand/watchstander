@@ -8,15 +8,11 @@ namespace Watchstander.Porcelain
 {
 	public class RootCollector : ICollector, IPipelineElement
 	{
-		public string Description { get; set; }
+		private CollectorContext context;
 
-		private IPipelineElement consumer;
-		private IDisposable timer;
-
-		public RootCollector (IPipelineElement consumer, IDisposable timer)
+		public RootCollector (CollectorContext context)
 		{
-			this.consumer = consumer;
-			this.timer = timer;
+			this.context = context;
 		}
 
 		public ICollector Disabled()
@@ -32,7 +28,7 @@ namespace Watchstander.Porcelain
 
 		public void Shutdown()
 		{
-			timer.Dispose ();
+			context.Disposables.Dispose ();
 		}
 
 		public ICollector WithName(string name)
@@ -68,21 +64,27 @@ namespace Watchstander.Porcelain
 			throw new Exception("you must provide a tagger");
 		}
 
+		public AccumulatingSchemaEntry GetSchemaEntry<TData>(string metricName)
+		{
+			return context.Schema.GetEntry (metricName);
+		}
+
 		public ICollectorMetric<TData> GetMetric<TData>(string name)
 		{
-			return new CollectorMetric<TData> (this, name, new TagLimiter (), true);
+			var entry = GetSchemaEntry<TData> (name);
+			return new CollectorMetric<TData> (this, entry, name, new TagLimiter (), true);
 		}
 
 		public void Consume(IEnumerable<IDataPoint<long>> values)
 		{
 			Console.WriteLine ("RootCollector consuming " + values.Count() + " data points");
-			consumer.Consume(values);
+			context.DataConsumer.Consume(values);
 		}
 
 		public void Consume(IEnumerable<IDataPoint<float>> values)
 		{
 			Console.WriteLine ("RootCollector consuming " + values.Count() + " data points");
-			consumer.Consume(values);
+			context.DataConsumer.Consume(values);
 		}
 	}
 }

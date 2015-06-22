@@ -24,7 +24,9 @@ namespace WatchstanderTests.Functional
 
 		private ICollector getRootCollector(IPipelineElement consumer)
 		{
-			return new RootCollector (consumer, new MockFlusher());
+			var schema = new AccumulatingSchema (new AccumulatingSchemaOptions ());
+			var context = new CollectorContext (consumer, new MockFlusher (), schema);
+			return new RootCollector (context);
 		}
 
 		[Test]

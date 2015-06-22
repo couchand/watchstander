@@ -8,6 +8,7 @@ namespace Watchstander.Porcelain
 	public class CollectorMetric<TData> : ICollectorMetric<TData>
 	{
 		private readonly RootCollector collector;
+		private readonly AccumulatingSchemaEntry schemaEntry;
 		private readonly string name;
 		private readonly bool enabled;
 
@@ -25,14 +26,33 @@ namespace Watchstander.Porcelain
 		}
 
 		public string Name => name;
-		public string Description { get; set; }
 
-		public Rate Rate => Rate.Unknown;
-		public string Unit => "";
+		public string Description => schemaEntry.Metric.Description;
+		public Rate Rate => schemaEntry.Metric.Rate;
+		public string Unit => schemaEntry.Metric.Unit;
 
-		internal CollectorMetric (RootCollector collector, string name, TagLimiter Limiter, bool enabled)
+		public ICollectorMetric<TData> SetDescription(string description)
+		{
+			schemaEntry.SetDescription(description);
+			return this;
+		}
+
+		public ICollectorMetric<TData> SetRate(Rate rate)
+		{
+			schemaEntry.SetRate (rate);
+			return this;
+		}
+
+		public ICollectorMetric<TData> SetUnit(string unit)
+		{
+			schemaEntry.SetUnit(unit);
+			return this;
+		}
+
+		internal CollectorMetric (RootCollector collector, AccumulatingSchemaEntry schemaEntry, string name, TagLimiter Limiter, bool enabled)
 		{
 			this.collector = collector;
+			this.schemaEntry = schemaEntry;
 			this.Limiter = Limiter;
 			this.name = name;
 			this.enabled = enabled;
@@ -43,10 +63,9 @@ namespace Watchstander.Porcelain
 			this.Limiter = Limiter;
 
 			this.collector = copy.collector;
+			this.schemaEntry = copy.schemaEntry;
 			this.name = copy.name;
 			this.enabled = enabled ?? copy.enabled;
-
-			this.Description = copy.Description;
 		}
 
 		public ICollectorMetric<TData> Disabled()

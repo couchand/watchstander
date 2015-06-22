@@ -89,6 +89,7 @@
     <Compile Include="Plumbing\AccumulatingSchema.cs" />
     <Compile Include="Utilities\DisposableContainer.cs" />
     <Compile Include="Plumbing\MetadataSender.cs" />
+    <Compile Include="Plumbing\CollectorContext.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

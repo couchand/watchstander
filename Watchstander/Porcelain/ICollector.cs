@@ -28,6 +28,10 @@ namespace Watchstander.Porcelain
 		ICollectorMetric<TData> Disabled ();
 		ICollectorMetric<TData> Reenabled ();
 
+		ICollectorMetric<TData> SetDescription (string description);
+		ICollectorMetric<TData> SetRate (Rate rate);
+		ICollectorMetric<TData> SetUnit (string unit);
+
 		ICollectorMetric<TData> WithTag (string tagKey, string tagValue);
 		ICollectorMetric<TData> WithTags (IReadOnlyDictionary<string, string> tags);
 

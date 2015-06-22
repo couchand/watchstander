@@ -87,7 +87,8 @@ namespace Watchstander.Porcelain
 
 		public ICollectorMetric<TData> GetMetric<TData>(string name)
 		{
-			return new CollectorMetric<TData>(Root, NameLimiter.Resolve(name), TagLimiter, Enabled);
+			var entry = Root.GetSchemaEntry<TData> (name);
+			return new CollectorMetric<TData> (Root, entry, NameLimiter.Resolve(name), TagLimiter, Enabled);
 		}
 	}
 }

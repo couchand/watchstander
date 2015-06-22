@@ -20,15 +20,23 @@ namespace Watchstander
 
 			Console.WriteLine ("Creating metrics queue");
 			var metricsQueue = new DataQueue ();
-			var flushOptions = new FlusherOptions (metricsQueue, api);
-			flushOptions.Timeout = options.FlushTimeout;
 
 			Console.WriteLine ("Creating metrics flusher");
+			var flushOptions = new FlusherOptions (metricsQueue, api);
+			flushOptions.Timeout = options.FlushTimeout;
 			var apiFlusher = new Flusher (flushOptions);
 			disposables.Add (apiFlusher);
 
+			Console.WriteLine ("Creating accumulating schema");
+			var schemaOptions = new AccumulatingSchemaOptions ();
+			schemaOptions.AllowMetadataUpdates = options.AllowMetadataUpdates;
+			var schema = new AccumulatingSchema (schemaOptions);
+
+			Console.WriteLine ("Creating collector context");
+			var context = new CollectorContext (metricsQueue, disposables, schema);
+
 			Console.WriteLine ("Creating collector");
-			return new RootCollector (metricsQueue, disposables);
+			return new RootCollector (context);
 		}
 	}
 }

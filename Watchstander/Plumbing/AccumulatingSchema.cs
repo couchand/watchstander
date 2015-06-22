@@ -40,20 +40,71 @@ namespace Watchstander.Plumbing
 		}
 	}
 
+	public class AccumulatingSchemaOptions
+	{
+		/// <summary>
+		/// Are redefinitions of existing metadata allowed?
+		/// </summary>
+		/// <value><c>true</c> to allow metadata updates; otherwise, <c>false</c>.</value>
+		public bool AllowMetadataUpdates { get; set; }
+
+		public static AccumulatingSchemaOptions Defaults = new AccumulatingSchemaOptions(false)
+		{
+			AllowMetadataUpdates = false
+		};
+
+		public AccumulatingSchemaOptions(bool loadDefaults = true)
+		{
+			if (!loadDefaults)
+				return;
+
+			this.AllowMetadataUpdates = Defaults.AllowMetadataUpdates;
+		}
+	}
+
 	public class AccumulatingSchema : ISchema
 	{
+		private bool allowMetadataUpdates;
 		private IDictionary<string, AccumulatingSchemaEntry> entries;
 
-		public IReadOnlyDictionary<string, ISchemaEntry> Entries => (IReadOnlyDictionary<string, ISchemaEntry>)entries.AsReadOnly();
-
-		public AccumulatingSchema()
+		public IReadOnlyDictionary<string, ISchemaEntry> Entries
 		{
+			get
+			{
+				var dict = new Dictionary<string, ISchemaEntry> ();
+
+				foreach (var key in entries.Keys)
+				{
+					dict [key] = entries [key];
+				}
+
+				return dict.AsReadOnly ();
+			}
+		}
+
+		public AccumulatingSchema(AccumulatingSchemaOptions options)
+		{
+			this.allowMetadataUpdates = options.AllowMetadataUpdates;
 			this.entries = new Dictionary<string, AccumulatingSchemaEntry>();
 		}
 
-		public void AddEntry(AccumulatingMetric metric)
+		public AccumulatingSchemaEntry AddEntry(string metricName)
 		{
-			this.entries [metric.Name] = new AccumulatingSchemaEntry(metric);
+			var metric = allowMetadataUpdates
+				? new AccumulatingMetric(metricName)
+				: new SetOnceMetric(metricName);
+
+			var entry = new AccumulatingSchemaEntry(metric);
+			entries [metric.Name] = entry;
+			return entry;
+		}
+
+		public AccumulatingSchemaEntry GetEntry(string metricName)
+		{
+			if (entries.ContainsKey(metricName))
+				return entries[metricName];
+
+			return AddEntry(metricName);
 		}
 	}
 }

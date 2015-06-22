@@ -25,7 +25,9 @@ namespace WatchstanderTests.Functional
 
 		private ICollectorMetric<TData> getMetric<TData>(IPipelineElement consumer)
 		{
-			return new RootCollector (consumer, new MockFlusher())
+			var schema = new AccumulatingSchema (new AccumulatingSchemaOptions ());
+			var context = new CollectorContext (consumer, new MockFlusher (), schema);
+			return new RootCollector (context)
 				.WithTag("host", "foobar")
 				.GetMetric<TData>("foo.bar.baz");
 		}
@@ -170,6 +172,46 @@ namespace WatchstanderTests.Functional
 
 			Assert.AreEqual (42, consumer.longConsumer.Data [0].Value);
 			Assert.AreEqual (43, consumer.longConsumer.Data [1].Value);
+		}
+
+		[Test]
+		public void TestSetDescription()
+		{
+			var metric = getMetric<long>();
+
+			var wittyDescription = "The rain in Spain falls mainly on the plain.";
+
+			metric.SetDescription(wittyDescription);
+
+			Assert.AreEqual (wittyDescription, metric.Description);
+
+			Assert.Throws<Exception> (() => metric.SetDescription ("Something else!"));
+		}
+
+		[Test]
+		public void TestSetRate()
+		{
+			var metric = getMetric<long>();
+
+			metric.SetRate(Rate.Gauge);
+
+			Assert.AreEqual (Rate.Gauge, metric.Rate);
+
+			Assert.Throws<Exception> (() => metric.SetRate (Rate.Counter));
+		}
+
+		[Test]
+		public void TestSetUnit()
+		{
+			var metric = getMetric<long>();
+
+			var someUnit = "volts";
+
+			metric.SetUnit(someUnit);
+
+			Assert.AreEqual (someUnit, metric.Unit);
+
+			Assert.Throws<Exception> (() => metric.SetUnit ("furlongs per fortnight"));
 		}
 	}
 }

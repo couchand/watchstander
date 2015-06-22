@@ -25,7 +25,9 @@ namespace WatchstanderTests.Functional
 
 		private ICollectorMetric<TData> getMetric<TData>(IPipelineElement consumer)
 		{
-			return new RootCollector (consumer, new MockFlusher())
+			var schema = new AccumulatingSchema (new AccumulatingSchemaOptions ());
+			var context = new CollectorContext (consumer, new MockFlusher (), schema);
+			return new RootCollector (context)
 				.WithTag("host", "foobar")
 				.GetMetric<TData>("foo.bar.baz");
 		}
