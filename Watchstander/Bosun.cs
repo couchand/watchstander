@@ -1,6 +1,7 @@
 ﻿using System;
 using Watchstander.Plumbing;
 using Watchstander.Porcelain;
+using Watchstander.Utilities;
 
 namespace Watchstander
 {
@@ -14,6 +15,9 @@ namespace Watchstander
 			Console.WriteLine ("Starting Bosun collector for url " + options.InstanceUrl);
 			var api = new Api (options.ApiOptions);
 
+			Console.WriteLine ("Creating disposables holder");
+			var disposables = new DisposableContainer ();
+
 			Console.WriteLine ("Creating metrics queue");
 			var metricsQueue = new DataQueue ();
 			var flushOptions = new FlusherOptions (metricsQueue, api);
@@ -21,9 +25,10 @@ namespace Watchstander
 
 			Console.WriteLine ("Creating metrics flusher");
 			var apiFlusher = new Flusher (flushOptions);
+			disposables.Add (apiFlusher);
 
 			Console.WriteLine ("Creating collector");
-			return new RootCollector (metricsQueue, apiFlusher);
+			return new RootCollector (metricsQueue, disposables);
 		}
 	}
 }
