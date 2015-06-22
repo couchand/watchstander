@@ -90,6 +90,7 @@
     <Compile Include="Utilities\DisposableContainer.cs" />
     <Compile Include="Plumbing\MetadataSender.cs" />
     <Compile Include="Plumbing\CollectorContext.cs" />
+    <Compile Include="Plumbing\StaticTag.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

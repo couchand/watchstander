@@ -7,20 +7,20 @@ namespace Watchstander.Plumbing
 {
 	public class TaggerRepository
 	{
-		private readonly Dictionary<string, string> tags;
+		private readonly Dictionary<string, StaticTag> tags;
 		private readonly Dictionary<string, Type> types;
 		private readonly Dictionary<string, ITag> taggers;
 
 		public TaggerRepository ()
 		{
-			tags = new Dictionary<string, string> ();
+			tags = new Dictionary<string, StaticTag> ();
 			types = new Dictionary<string, Type> ();
 			taggers = new Dictionary<string, ITag> ();
 		}
 
 		public TaggerRepository (TaggerRepository copy)
 		{
-			this.tags = new Dictionary<string, string> (copy.tags);
+			this.tags = new Dictionary<string, StaticTag> (copy.tags);
 			this.types = new Dictionary<string, Type> (copy.types);
 			this.taggers = new Dictionary<string, ITag> (copy.taggers);
 		}
@@ -30,14 +30,48 @@ namespace Watchstander.Plumbing
 			return tags.Keys.Concat (types.Keys);
 		}
 
-		public void AddStatic (string tagKey, string tagValue)
+		public virtual void AddStatic (string tagKey, string tagValue)
 		{
-			if (types.ContainsKey (tagKey) || tags.ContainsKey (tagKey))
+			if (types.ContainsKey (tagKey))
 			{
 				throw new Exception ("already exists!");
 			}
 
-			tags [tagKey] = tagValue;
+			StaticTag tag;
+
+			if (tags.ContainsKey (tagKey))
+			{
+				tag = tags [tagKey];
+			}
+			else
+			{
+				tag = new StaticTag (tagKey);
+				tags [tagKey] = tag;
+			}
+
+			tag.AddValue (tagValue);
+		}
+
+		public virtual void AddStatic (string tagKey, IEnumerable<string> tagValues)
+		{
+			if (types.ContainsKey (tagKey))
+			{
+				throw new Exception ("already exists!");
+			}
+
+			StaticTag tag;
+
+			if (tags.ContainsKey (tagKey))
+			{
+				tag = tags [tagKey];
+			}
+			else
+			{
+				tag = new StaticTag (tagKey);
+				tags [tagKey] = tag;
+			}
+
+			tag.AddValues (tagValues);
 		}
 
 		public bool ContainsStatic (string tagKey)
@@ -50,7 +84,7 @@ namespace Watchstander.Plumbing
 			return tags.ContainsKey (tagKey);
 		}
 
-		public string GetStatic (string tagKey)
+		public StaticTag GetStatic (string tagKey)
 		{
 			if (!ContainsStatic (tagKey))
 			{
@@ -60,7 +94,7 @@ namespace Watchstander.Plumbing
 			return tags [tagKey];
 		}
 
-		public void AddDynamic<TTaggable> (Tagger<TTaggable> tagger)
+		public virtual void AddDynamic<TTaggable> (Tagger<TTaggable> tagger)
 		{
 			var tagKey = tagger.TagKey;
 
@@ -101,6 +135,36 @@ namespace Watchstander.Plumbing
 		public bool ContainsAny (string tagKey) 
 		{
 			return tags.ContainsKey (tagKey) || types.ContainsKey (tagKey);
+		}
+	}
+
+	public class ReadOnlyTaggerRepository : TaggerRepository
+	{
+		public ReadOnlyTaggerRepository () : base () {}
+		public ReadOnlyTaggerRepository (TaggerRepository other)
+			: base (other) {}
+
+		public virtual void AddStatic (string tagKey, string tagValue)
+		{
+			throw new Exception ("tagger repo is read-only");
+		}
+
+		public virtual void AddStatic (string tagKey, IEnumerable<string> tagValues)
+		{
+			throw new Exception ("tagger repo is read-only");
+		}
+
+		public virtual void AddDynamic<TTaggable> (Tagger<TTaggable> tagger)
+		{
+			throw new Exception ("tagger repo is read-only");
+		}
+	}
+
+	public static class TaggerExtensions
+	{
+		public static ReadOnlyTaggerRepository AsReadOnly (this TaggerRepository repo)
+		{
+			return new ReadOnlyTaggerRepository (repo);
 		}
 	}
 }

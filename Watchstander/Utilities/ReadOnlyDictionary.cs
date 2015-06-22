@@ -18,9 +18,8 @@ namespace Watchstander.Utilities
 
 		public ReadOnlyDictionary(IDictionary<TKey, TValue> dictionary)
 		{
-			// TODO: copy
 			// http://stackoverflow.com/questions/678379/is-there-a-read-only-generic-dictionary-available-in-net#comment8995247_1269311
-			_dictionary = dictionary;
+			_dictionary = new Dictionary<TKey, TValue>(dictionary);
 		}
 
 		#region IDictionary<TKey,TValue> Members
