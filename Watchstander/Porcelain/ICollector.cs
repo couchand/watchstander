@@ -4,7 +4,7 @@ using Watchstander.Common;
 
 namespace Watchstander.Porcelain
 {
-	public interface ICollector : IDescribable
+	public interface ICollector
 	{
 		ICollector Disabled ();
 		ICollector Reenabled ();
@@ -23,7 +23,7 @@ namespace Watchstander.Porcelain
 		ICollectorMetric<TData> GetMetric<TData> (string metricName);
 	}
 
-	public interface ICollectorMetric<TData> : IMetric, IDescribable
+	public interface ICollectorMetric<TData> : IMetric
 	{
 		ICollectorMetric<TData> Disabled ();
 		ICollectorMetric<TData> Reenabled ();
@@ -37,7 +37,7 @@ namespace Watchstander.Porcelain
 		ICollectorTimeSeries<TData> GetTimeSeries ();
 	}
 
-	public interface ICollectorTimeSeries<TData> : ITimeSeries, IRecorder<TData>, IDescribable
+	public interface ICollectorTimeSeries<TData> : ITimeSeries, IRecorder<TData>
 	{
 		ICollectorTimeSeries<TData> Disabled ();
 		ICollectorTimeSeries<TData> Reenabled ();
