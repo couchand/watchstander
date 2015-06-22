@@ -83,6 +83,9 @@
     <Compile Include="Plumbing\UriValidator.cs" />
     <Compile Include="Plumbing\MetricValidator.cs" />
     <Compile Include="Options\Options.cs" />
+    <Compile Include="Common\ITag.cs" />
+    <Compile Include="Plumbing\TaggerRepository.cs" />
+    <Compile Include="Plumbing\Tagger.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

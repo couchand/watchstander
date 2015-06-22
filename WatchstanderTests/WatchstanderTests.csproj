@@ -50,6 +50,8 @@
     <Compile Include="Common\MockFlusher.cs" />
     <Compile Include="Unit\UriValidatorTests.cs" />
     <Compile Include="Unit\MetricValidatorTests.cs" />
+    <Compile Include="Unit\TaggerTests.cs" />
+    <Compile Include="Unit\TaggerRepositoryTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
