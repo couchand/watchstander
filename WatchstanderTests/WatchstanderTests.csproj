@@ -54,6 +54,8 @@
     <Compile Include="Unit\TaggerRepositoryTests.cs" />
     <Compile Include="Unit\AccumulatingMetricTests.cs" />
     <Compile Include="Unit\DisposableContainerTests.cs" />
+    <Compile Include="Integration\MetadataTests.cs" />
+    <Compile Include="Common\MockSchema.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
