@@ -86,6 +86,7 @@
     <Compile Include="Common\ITag.cs" />
     <Compile Include="Plumbing\TaggerRepository.cs" />
     <Compile Include="Plumbing\Tagger.cs" />
+    <Compile Include="Plumbing\AccumulatingMetric.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

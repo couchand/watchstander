@@ -52,6 +52,7 @@
     <Compile Include="Unit\MetricValidatorTests.cs" />
     <Compile Include="Unit\TaggerTests.cs" />
     <Compile Include="Unit\TaggerRepositoryTests.cs" />
+    <Compile Include="Unit\AccumulatingMetricTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
