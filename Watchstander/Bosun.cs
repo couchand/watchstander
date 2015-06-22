@@ -9,9 +9,9 @@ namespace Watchstander
 		public static ICollector Collector (CollectorOptions options)
 		{
 			var uriValidator = new UriValidator ();
-			uriValidator.Validate (options.ApiOptions.InstanceUrl);
+			uriValidator.Validate (options.InstanceUrl);
 
-			Console.WriteLine ("Starting Bosun collector for url " + options.ApiOptions.InstanceUrl);
+			Console.WriteLine ("Starting Bosun collector for url " + options.InstanceUrl);
 			var api = new Api (options.ApiOptions);
 
 			Console.WriteLine ("Creating metrics queue");
