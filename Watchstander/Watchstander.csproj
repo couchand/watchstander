@@ -87,6 +87,7 @@
     <Compile Include="Plumbing\AccumulatingMetric.cs" />
     <Compile Include="Plumbing\LoadedSchema.cs" />
     <Compile Include="Plumbing\AccumulatingSchema.cs" />
+    <Compile Include="Utilities\DisposableContainer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
