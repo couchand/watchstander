@@ -57,7 +57,6 @@
     <Compile Include="Plumbing\Api.cs" />
     <Compile Include="Plumbing\MetadataFactory.cs" />
     <Compile Include="Plumbing\RemoteMetadata.cs" />
-    <Compile Include="Plumbing\Schema.cs" />
     <Compile Include="Plumbing\SchemaLoader.cs" />
     <Compile Include="Plumbing\Serializer.cs" />
     <Compile Include="Utilities\DictionaryExtensions.cs" />
@@ -87,6 +86,7 @@
     <Compile Include="Plumbing\TaggerRepository.cs" />
     <Compile Include="Plumbing\Tagger.cs" />
     <Compile Include="Plumbing\AccumulatingMetric.cs" />
+    <Compile Include="Plumbing\LoadedSchema.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

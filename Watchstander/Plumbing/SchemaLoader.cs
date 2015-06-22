@@ -64,7 +64,7 @@ namespace Watchstander.Plumbing
 			return String.Equals (a, b, StringComparison.OrdinalIgnoreCase);
 		}
 
-		private static void LoadMetricMetadata(SchemaEntry entry, IMetadata item)
+		private static void LoadMetricMetadata(LoadedSchemaEntry entry, IMetadata item)
 		{
 			if (areSame(item.Name, "desc"))
 			{
@@ -91,13 +91,13 @@ namespace Watchstander.Plumbing
 			}
 		}
 
-		private static void LoadMetricTagKeys(SchemaEntry entry, Api api)
+		private static void LoadMetricTagKeys(LoadedSchemaEntry entry, Api api)
 		{
 			var tagKeys = api.ListMetricTagKeys (entry.metric.Name);
 			entry.metric.AddTagKeys (tagKeys);
 		}
 
-		private static void LoadTimeSeriesMetadata(SchemaTimeSeries series, IMetadata item)
+		private static void LoadTimeSeriesMetadata(LoadedSchemaTimeSeries series, IMetadata item)
 		{
 			if (areSame(item.Name, "desc"))
 			{
@@ -105,7 +105,7 @@ namespace Watchstander.Plumbing
 			}
 		}
 
-		private static void LoadTimeSeriesMetadata(SchemaEntry entry, IList<IMetadata> metadata)
+		private static void LoadTimeSeriesMetadata(LoadedSchemaEntry entry, IList<IMetadata> metadata)
 		{
 			var tagKeys = entry.Metric.TagKeys;
 			Func<IReadOnlyDictionary<string, string>, string> makeKey = tags =>
@@ -144,7 +144,7 @@ namespace Watchstander.Plumbing
 
 			foreach (var items in seriesByKey.Values)
 			{
-				var series = new SchemaTimeSeries (entry.Metric, items[0]);
+				var series = new LoadedSchemaTimeSeries (entry.Metric, items[0]);
 
 				foreach (var item in items)
 				{
@@ -155,14 +155,14 @@ namespace Watchstander.Plumbing
 			}
 		}
 
-		private static void LoadMetricTagValues(SchemaEntry entry, LoadMetricTagValues type)
+		private static void LoadMetricTagValues(LoadedSchemaEntry entry, LoadMetricTagValues type)
 		{
 			throw new Exception ("unimplemented");
 		}
 
-		private static ISchema GetSchema(IDictionary<string, SchemaEntry> schema)
+		private static ISchema GetSchema(IDictionary<string, LoadedSchemaEntry> schema)
 		{
-			return new Schema (schema);
+			return new LoadedSchema (schema);
 		}
 
 		public ISchema LoadSchema(Api api)
@@ -171,7 +171,7 @@ namespace Watchstander.Plumbing
 				.ListMetrics ()
 				.ToDictionary (
 					name => name,
-					name => new SchemaEntry (name)
+					name => new LoadedSchemaEntry (name)
 				);
 
 			if (!options.LoadMetricMetadata)

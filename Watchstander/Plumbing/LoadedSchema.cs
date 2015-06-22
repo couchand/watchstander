@@ -5,7 +5,7 @@ using Watchstander.Utilities;
 
 namespace Watchstander.Plumbing
 {
-	public class Schema : ISchema
+	public class LoadedSchema : ISchema
 	{
 		public IReadOnlyDictionary<string, ISchemaEntry> Entries
 		{
@@ -22,30 +22,30 @@ namespace Watchstander.Plumbing
 			}
 		}
 
-		private IDictionary<string, SchemaEntry> schema;
+		private IDictionary<string, LoadedSchemaEntry> schema;
 
-		public Schema(IDictionary<string, SchemaEntry> schema)
+		public LoadedSchema(IDictionary<string, LoadedSchemaEntry> schema)
 		{
 			this.schema = schema;
 		}
 	}
 
-	public class SchemaEntry : ISchemaEntry
+	public class LoadedSchemaEntry : ISchemaEntry
 	{
 		public IMetric Metric => metric;
 		public IReadOnlyList<ITimeSeries> TimeSeries => timeSeries.AsReadOnly();
 
-		internal SchemaMetric metric;
+		internal LoadedSchemaMetric metric;
 		internal List<ITimeSeries> timeSeries;
 
-		public SchemaEntry(string name)
+		public LoadedSchemaEntry(string name)
 		{
-			metric = new SchemaMetric (name);
+			metric = new LoadedSchemaMetric (name);
 			timeSeries = new List<ITimeSeries> ();
 		}
 	}
 
-	public class SchemaMetric : IMetric
+	public class LoadedSchemaMetric : IMetric
 	{
 		public string Name { get; }
 
@@ -59,7 +59,7 @@ namespace Watchstander.Plumbing
 
 		public IReadOnlyList<string> TagKeys => tagKeys.AsReadOnly();
 
-		public SchemaMetric(string name)
+		public LoadedSchemaMetric(string name)
 		{
 			this.Name = name;
 			this.Rate = Rate.Unknown;
@@ -72,7 +72,7 @@ namespace Watchstander.Plumbing
 		}
 	}
 
-	public class SchemaTimeSeries : ITimeSeries
+	public class LoadedSchemaTimeSeries : ITimeSeries
 	{
 		public IMetric Metric { get; }
 		public string Description { get; set; }
@@ -81,7 +81,7 @@ namespace Watchstander.Plumbing
 
 		private IDictionary<string, string> tagValues;
 
-		public SchemaTimeSeries(IMetric Metric, IMetadata metadata)
+		public LoadedSchemaTimeSeries(IMetric Metric, IMetadata metadata)
 		{
 			this.Metric = Metric;
 			this.tagValues = new Dictionary<string, string>();
