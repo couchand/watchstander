@@ -91,6 +91,15 @@
     <Compile Include="Plumbing\MetadataSender.cs" />
     <Compile Include="Plumbing\CollectorContext.cs" />
     <Compile Include="Plumbing\StaticTag.cs" />
+    <Compile Include="Expressions\Types.cs" />
+    <Compile Include="Expressions\Functions.cs" />
+    <Compile Include="Expressions\Aggregators.cs" />
+    <Compile Include="Expressions\QueryBuilder.cs" />
+    <Compile Include="Expressions\Duration.cs" />
+    <Compile Include="Expressions\Downsampler.cs" />
+    <Compile Include="Expressions\RateOptions.cs" />
+    <Compile Include="Expressions\IQuerySegment.cs" />
+    <Compile Include="Expressions\MetricQuery.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -99,6 +108,7 @@
     <Folder Include="Plumbing\" />
     <Folder Include="Porcelain\" />
     <Folder Include="Options\" />
+    <Folder Include="Expressions\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
