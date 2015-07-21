@@ -47,9 +47,9 @@ namespace WatchstanderTests.Integration
 
 			var collector = Bosun.Collector (options)
 				.WithTag ("host", "foobar")
-				.WithName ("tests.usage")
-				.WithTagger<int> ("thread", i => i.ToString ())
-				.WithTagger<int> ("job", j => j.ToString ());
+				.WithName ("tests.usage");
+				//.WithTagger<int> ("thread", i => i.ToString ())
+				//.WithTagger<int> ("job", j => j.ToString ());
 
 			var metric = collector.GetMetric<long> ("parallel");
 
@@ -57,7 +57,7 @@ namespace WatchstanderTests.Integration
 
 			Parallel.For (0, 8, i => {
 
-				var jobMetric = metric.WithTag<int> ("job", i);
+				var jobMetric = metric;//.WithTag<int> ("job", i);
 				var job = new ParallelJob(jobMetric);
 				var timer = new Timer(job.Callback, 1, 100, 100);
 

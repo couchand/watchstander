@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{A7B275CB-A03E-428B-8587-459EBE26048E}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>WatchstanderTests.Common</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Common\MockConsumers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\MockData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\MockFlusher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\MockSchema.cs" />
+  </ItemGroup>
+</Project>

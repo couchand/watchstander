@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5F89B51E-9994-4782-85A5-479AB652AA20}</ProjectGuid>
+    <ProjectGuid>{1C17DB44-835A-4FE6-A0DC-64539B1186B3}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>WatchstanderTests</RootNamespace>
-    <AssemblyName>WatchstanderTests</AssemblyName>
+    <RootNamespace>WatchstanderIntegrationTests</RootNamespace>
+    <AssemblyName>WatchstanderIntegrationTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -30,41 +30,17 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Unit\MetadataTests.cs" />
-    <Compile Include="Unit\RateTests.cs" />
-    <Compile Include="Functional\LimitedCollectorTests.cs" />
-    <Compile Include="Unit\TaggerDictionaryTests.cs" />
-    <Compile Include="Functional\MetricTests.cs" />
-    <Compile Include="Functional\TimeSeriesTests.cs" />
-    <Compile Include="Unit\DataQueueTests.cs" />
-    <Compile Include="Unit\UriValidatorTests.cs" />
-    <Compile Include="Unit\MetricValidatorTests.cs" />
-    <Compile Include="Unit\TaggerTests.cs" />
-    <Compile Include="Unit\TaggerRepositoryTests.cs" />
-    <Compile Include="Unit\AccumulatingMetricTests.cs" />
-    <Compile Include="Unit\DisposableContainerTests.cs" />
-    <Compile Include="Functional\AccumulatingSchemaTests.cs" />
-    <Compile Include="Unit\StaticTagTests.cs" />
-    <Compile Include="Functional\ExpressionTests.cs" />
-    <Compile Include="Unit\Expressions\FunctionTests.cs" />
-    <Compile Include="Unit\Expressions\RateOptionsTests.cs" />
-    <Compile Include="Unit\Expressions\DownsamplerTests.cs" />
-    <Compile Include="Unit\Expressions\DurationTests.cs" />
-    <Compile Include="Unit\Expressions\QueryBuilderTests.cs" />
-    <Compile Include="Unit\Expressions\ArithmeticTests.cs" />
+    <Compile Include="Integration\IntegrationTests.cs" />
+    <Compile Include="Integration\MetadataTests.cs" />
+    <Compile Include="Integration\SchemaLoaderTests.cs" />
+    <Compile Include="Integration\UsageExample.cs" />
   </ItemGroup>
   <Import Project="..\WatchstanderTests.Common\WatchstanderTests.Common.projitems" Label="Shared" Condition="Exists('..\WatchstanderTests.Common\WatchstanderTests.Common.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="Unit\" />
-    <Folder Include="Functional\" />
-    <Folder Include="Unit\Expressions\" />
-  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

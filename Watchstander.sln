@@ -5,12 +5,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Watchstander", "Watchstande
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WatchstanderTests", "WatchstanderTests\WatchstanderTests.csproj", "{5F89B51E-9994-4782-85A5-479AB652AA20}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WatchstanderTests.Integration", "WatchstanderTests.Integration\WatchstanderTests.Integration.csproj", "{1C17DB44-835A-4FE6-A0DC-64539B1186B3}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "WatchstanderTests.Common", "WatchstanderTests.Common\WatchstanderTests.Common.shproj", "{A7B275CB-A03E-428B-8587-459EBE26048E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1C17DB44-835A-4FE6-A0DC-64539B1186B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C17DB44-835A-4FE6-A0DC-64539B1186B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C17DB44-835A-4FE6-A0DC-64539B1186B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C17DB44-835A-4FE6-A0DC-64539B1186B3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5F89B51E-9994-4782-85A5-479AB652AA20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5F89B51E-9994-4782-85A5-479AB652AA20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F89B51E-9994-4782-85A5-479AB652AA20}.Release|Any CPU.ActiveCfg = Release|Any CPU
