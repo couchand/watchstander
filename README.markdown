@@ -9,6 +9,8 @@ a toolkit for bosun
   * running the tests
   * api reference
 
+[![Build Status](https://travis-ci.org/couchand/watchstander.svg?branch=master)](https://travis-ci.org/couchand/watchstander)
+
 introduction
 ------------
 
