@@ -1,0 +1,25 @@
+language: csharp
+solution: Watchstander.sln
+
+mono:
+  - latest
+  - 3.10.0
+  - 3.8.0
+
+  - alpha
+  - beta
+  - nightly
+
+matrix:
+  allow-failures:
+    - mono: alpha
+    - mono: beta
+    - mono: nightly
+
+install:
+  - travis_retry nuget restore Watchstander.sln
+  - travis_retry nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
+
+script:
+  - xbuild /p:Configuration=Release Watchstander.sln
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Watchstander.Tests/bin/Release/Watchstander.Tests.dll
